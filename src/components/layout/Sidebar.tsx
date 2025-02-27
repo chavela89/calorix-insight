@@ -39,4 +39,98 @@ function SidebarNavItem({ icon, label, to, isActive }: SidebarNavItemProps) {
         cn(
           "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
           isActive
-            ? "bg-
+            ? "bg-accent text-accent-foreground font-medium"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+        )
+      }
+    >
+      {icon}
+      <span>{label}</span>
+    </NavLink>
+  );
+}
+
+export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
+  return (
+    <div
+      className={cn(
+        "fixed inset-y-0 left-0 z-20 flex h-full w-64 flex-col bg-background border-r transition-transform duration-300 ease-in-out",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        "md:translate-x-0"
+      )}
+    >
+      <div className="flex items-center justify-between border-b px-4 py-2">
+        <Link to="/" className="flex items-center gap-2 font-semibold">
+          <Apple className="h-6 w-6 text-primary" />
+          <span className="text-xl font-bold">CaloriX</span>
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="md:hidden"
+        >
+          <ChevronLeft className="h-5 w-5" />
+          <span className="sr-only">Close sidebar</span>
+        </Button>
+      </div>
+      <ScrollArea className="flex-1 py-4">
+        <nav className="space-y-1 px-2">
+          <SidebarNavItem
+            to="/"
+            icon={<Home className="h-5 w-5" />}
+            label="Dashboard"
+          />
+          <SidebarNavItem
+            to="/nutrition"
+            icon={<Apple className="h-5 w-5" />}
+            label="Nutrition"
+          />
+          <SidebarNavItem
+            to="/progress"
+            icon={<Activity className="h-5 w-5" />}
+            label="Progress"
+          />
+          <SidebarNavItem
+            to="/statistics"
+            icon={<BarChart2 className="h-5 w-5" />}
+            label="Statistics"
+          />
+          <SidebarNavItem
+            to="/planner"
+            icon={<Calendar className="h-5 w-5" />}
+            label="Meal Planner"
+          />
+          <SidebarNavItem
+            to="/recommendations"
+            icon={<Lightbulb className="h-5 w-5" />}
+            label="Recommendations"
+          />
+          <SidebarNavItem
+            to="/achievements"
+            icon={<Trophy className="h-5 w-5" />}
+            label="Achievements"
+          />
+          <SidebarNavItem
+            to="/health"
+            icon={<Heart className="h-5 w-5" />}
+            label="Health"
+          />
+        </nav>
+        <Separator className="my-4" />
+        <nav className="space-y-1 px-2">
+          <SidebarNavItem
+            to="/profile"
+            icon={<User2 className="h-5 w-5" />}
+            label="My Profile"
+          />
+          <SidebarNavItem
+            to="/settings"
+            icon={<Settings className="h-5 w-5" />}
+            label="Settings"
+          />
+        </nav>
+      </ScrollArea>
+    </div>
+  );
+}
