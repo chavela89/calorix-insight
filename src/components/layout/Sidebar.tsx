@@ -37,7 +37,7 @@ function SidebarNavItem({ icon, label, to, isActive }: SidebarNavItemProps) {
       to={to}
       className={({ isActive }) =>
         cn(
-          "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+          "flex items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-colors",
           isActive
             ? "bg-accent text-accent-foreground font-medium"
             : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -45,7 +45,7 @@ function SidebarNavItem({ icon, label, to, isActive }: SidebarNavItemProps) {
       }
     >
       {icon}
-      <span>{label}</span>
+      <span className="text-sm">{label}</span>
     </NavLink>
   );
 }
@@ -64,16 +64,16 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       {/* Боковая панель */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-20 flex h-full w-64 flex-col bg-background border-r transition-transform duration-300 ease-in-out",
+          "fixed inset-y-0 left-0 z-20 flex h-full w-60 flex-col bg-background border-r transition-transform duration-300 ease-in-out",
           "shadow-lg md:shadow-none", // Тень только для мобильной версии
           isOpen ? "translate-x-0" : "-translate-x-full",
           "md:translate-x-0" // На десктопе всегда видима
         )}
       >
-        <div className="flex items-center justify-between border-b px-4 py-3">
+        <div className="flex items-center justify-between border-b px-3 py-2.5">
           <Link to="/" className="flex items-center gap-2 font-semibold">
-            <Apple className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CaloriX</span>
+            <Apple className="h-5 w-5 text-primary" />
+            <span className="text-lg font-bold">CaloriX</span>
           </Link>
           <Button
             variant="ghost"
@@ -85,59 +85,59 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <span className="sr-only">Закрыть меню</span>
           </Button>
         </div>
-        <ScrollArea className="flex-1 py-2">
-          <nav className="space-y-0.5 px-2">
+        <ScrollArea className="flex-1 py-1.5">
+          <nav className="space-y-0.5 px-1.5">
             <SidebarNavItem
               to="/"
-              icon={<Home className="h-5 w-5" />}
+              icon={<Home className="h-4 w-4" />}
               label="Dashboard"
             />
             <SidebarNavItem
               to="/nutrition"
-              icon={<Apple className="h-5 w-5" />}
+              icon={<Apple className="h-4 w-4" />}
               label="Nutrition"
             />
             <SidebarNavItem
               to="/progress"
-              icon={<Activity className="h-5 w-5" />}
+              icon={<Activity className="h-4 w-4" />}
               label="Progress"
             />
             <SidebarNavItem
               to="/statistics"
-              icon={<BarChart2 className="h-5 w-5" />}
+              icon={<BarChart2 className="h-4 w-4" />}
               label="Statistics"
             />
             <SidebarNavItem
               to="/planner"
-              icon={<Calendar className="h-5 w-5" />}
+              icon={<Calendar className="h-4 w-4" />}
               label="Meal Planner"
             />
             <SidebarNavItem
               to="/recommendations"
-              icon={<Lightbulb className="h-5 w-5" />}
+              icon={<Lightbulb className="h-4 w-4" />}
               label="Recommendations"
             />
             <SidebarNavItem
               to="/achievements"
-              icon={<Trophy className="h-5 w-5" />}
+              icon={<Trophy className="h-4 w-4" />}
               label="Achievements"
             />
             <SidebarNavItem
               to="/health"
-              icon={<Heart className="h-5 w-5" />}
+              icon={<Heart className="h-4 w-4" />}
               label="Health"
             />
           </nav>
-          <Separator className="my-2" />
-          <nav className="space-y-0.5 px-2">
+          <Separator className="my-1.5" />
+          <nav className="space-y-0.5 px-1.5">
             <SidebarNavItem
               to="/profile"
-              icon={<User2 className="h-5 w-5" />}
+              icon={<User2 className="h-4 w-4" />}
               label="My Profile"
             />
             <SidebarNavItem
               to="/settings"
-              icon={<Settings className="h-5 w-5" />}
+              icon={<Settings className="h-4 w-4" />}
               label="Settings"
             />
           </nav>
