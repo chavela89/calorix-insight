@@ -64,10 +64,10 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       {/* Боковая панель */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-20 flex h-full w-[280px] flex-col bg-background border-r transition-transform duration-300 ease-in-out",
+          "fixed inset-y-0 left-0 z-20 flex h-full w-64 flex-col bg-background border-r transition-transform duration-300 ease-in-out",
           "shadow-lg md:shadow-none", // Тень только для мобильной версии
           isOpen ? "translate-x-0" : "-translate-x-full",
-          "md:relative md:translate-x-0 md:w-64" // На десктопе всегда видима и меньшей ширины
+          "md:translate-x-0" // На десктопе всегда видима
         )}
       >
         <div className="flex items-center justify-between border-b px-4 py-3">
