@@ -8,6 +8,15 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { Layout } from "@/components/layout/Layout";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Nutrition from "./pages/Nutrition";
+import Progress from "./pages/Progress";
+import Statistics from "./pages/Statistics";
+import Planner from "./pages/Planner";
+import Recommendations from "./pages/Recommendations";
+import Achievements from "./pages/Achievements";
+import Profile from "./pages/Profile";
+import Health from "./pages/Health";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -21,7 +30,15 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />
-              {/* Добавлять новые маршруты здесь */}
+              <Route path="nutrition" element={<Nutrition />} />
+              <Route path="progress" element={<Progress />} />
+              <Route path="statistics" element={<Statistics />} />
+              <Route path="planner" element={<Planner />} />
+              <Route path="recommendations" element={<Recommendations />} />
+              <Route path="achievements" element={<Achievements />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="health" element={<Health />} />
+              <Route path="settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

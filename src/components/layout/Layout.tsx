@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Toaster } from "@/components/ui/sonner";
 
 export function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +20,6 @@ export function Layout() {
           <Outlet />
         </main>
       </div>
-      <Toaster position="top-right" />
     </div>
   );
 }

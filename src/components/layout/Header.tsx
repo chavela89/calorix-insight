@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { ThemeSelector } from "@/components/ui/theme-selector";
 import { Bell, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +31,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
             <Menu className="h-5 w-5" />
             <span className="sr-only">Меню</span>
           </Button>
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <svg 
               width="32" 
               height="32" 
@@ -57,7 +58,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
             <h1 className="text-xl font-semibold tracking-tight">
               CaloriX
             </h1>
-          </div>
+          </Link>
         </div>
         
         <div className="flex items-center gap-3">
@@ -128,14 +129,14 @@ export function Header({ toggleSidebar }: HeaderProps) {
                 <p className="text-sm text-muted-foreground">Бесплатный план</p>
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                Мой профиль
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link to="/profile">Мой профиль</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                Настройки
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link to="/settings">Настройки</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                Подписка
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link to="/settings#billing">Подписка</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer text-destructive">
