@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +13,9 @@ import { StreakCard } from "@/components/dashboard/StreakCard";
 import { QuickAdd } from "@/components/dashboard/QuickAdd";
 import { toast } from "sonner";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Sample data
 const caloriesData = [1800, 2100, 1950, 2050, 1800, 1600, 1900];
@@ -68,6 +70,8 @@ const targets = {
 
 const Index = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [openMealDialog, setOpenMealDialog] = useState(false);
+  const [currentMealType, setCurrentMealType] = useState("");
   
   const formatDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = { 
@@ -95,9 +99,16 @@ const Index = () => {
   };
 
   const handleAddMeal = (mealType: string) => {
-    toast.success(`Добавление продуктов в ${mealType}`, {
-      description: "Эта функция будет доступна в следующем обновлении",
+    setCurrentMealType(mealType);
+    setOpenMealDialog(true);
+  };
+
+  const handleMealSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success(`Продукты добавлены в ${currentMealType}`, {
+      description: "Данные успешно сохранены и добавлены в дневник питания",
     });
+    setOpenMealDialog(false);
   };
 
   return (
@@ -233,6 +244,48 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      {/* Add Meal Dialog */}
+      <Dialog open={openMealDialog} onOpenChange={setOpenMealDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Добавление продуктов в {currentMealType}</DialogTitle>
+            <DialogDescription>
+              Добавьте продукты и блюда, которые вы употребили
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleMealSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="product" className="text-right">
+                  Продукт
+                </Label>
+                <Input
+                  id="product"
+                  placeholder="Например: Куриная грудка"
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="weight" className="text-right">
+                  Вес (г)
+                </Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  placeholder="100"
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Добавить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

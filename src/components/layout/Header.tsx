@@ -71,6 +71,38 @@ export function Header({ toggleSidebar, goBack }: HeaderProps) {
           </Link>
         </div>
         
+        {/* Center logo - visible on medium screens and up */}
+        <div className="hidden md:flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
+            <svg 
+              width="32" 
+              height="32" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="text-primary"
+            >
+              <path 
+                d="M20 10V14C20 18.4183 16.4183 22 12 22C7.58172 22 4 18.4183 4 14V10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+              />
+              <path 
+                d="M16 11H8M12 15V7" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+              />
+            </svg>
+            <h1 className="text-xl font-semibold tracking-tight">
+              CaloriX
+            </h1>
+          </Link>
+        </div>
+        
         <div className="flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

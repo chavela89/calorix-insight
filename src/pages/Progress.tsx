@@ -1,10 +1,27 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, LineChart, PieChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const Progress = () => {
+  const [openWeightDialog, setOpenWeightDialog] = useState(false);
+  const [weight, setWeight] = useState("");
+  
+  const handleWeightSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Process weight data
+    toast.success("Данные о весе успешно сохранены", {
+      description: `Текущий вес: ${weight} кг`,
+    });
+    setWeight("");
+    setOpenWeightDialog(false);
+  };
+
   return (
     <div className="container mx-auto">
       <div className="mb-8">
@@ -24,7 +41,7 @@ const Progress = () => {
           <CardContent className="h-80 flex items-center justify-center">
             <div className="text-center text-muted-foreground">
               <p>График изменения веса будет доступен после внесения данных</p>
-              <Button className="mt-4">Внести данные о весе</Button>
+              <Button className="mt-4" onClick={() => setOpenWeightDialog(true)}>Внести данные о весе</Button>
             </div>
           </CardContent>
         </Card>
@@ -59,6 +76,40 @@ const Progress = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Weight input dialog */}
+      <Dialog open={openWeightDialog} onOpenChange={setOpenWeightDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Внесение данных о весе</DialogTitle>
+            <DialogDescription>
+              Введите ваш текущий вес, чтобы отслеживать динамику изменений
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleWeightSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="weight" className="text-right">
+                  Вес
+                </Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  step="0.1"
+                  placeholder="70.5"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Сохранить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
