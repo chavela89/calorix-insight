@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AreaChart, BarChart2, PieChart, Calendar } from "lucide-react";
+import { AreaChart, BarChart2, PieChart, Calendar, Apple } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -48,10 +48,10 @@ const Statistics = () => {
                 </CardTitle>
                 <CardDescription>За последние 7 дней</CardDescription>
               </CardHeader>
-              <CardContent className="h-60 flex items-center justify-center">
+              <CardContent className="h-48 flex items-center justify-center">
                 {dataState.nutrition ? (
                   <div className="flex flex-col items-center justify-center text-center">
-                    <div className="w-full h-40 border border-border rounded-md p-4 flex items-center justify-center">
+                    <div className="w-full h-32 border border-border rounded-md p-4 flex items-center justify-center">
                       <div className="flex items-end h-full gap-2">
                         {[65, 90, 75, 80, 85, 60, 70].map((value, i) => (
                           <div 
@@ -85,10 +85,10 @@ const Statistics = () => {
                 </CardTitle>
                 <CardDescription>Среднее за неделю</CardDescription>
               </CardHeader>
-              <CardContent className="h-60 flex items-center justify-center">
+              <CardContent className="h-48 flex items-center justify-center">
                 {dataState.nutrition ? (
                   <div className="flex flex-col items-center justify-center text-center">
-                    <div className="w-40 h-40 rounded-full border border-border p-4 relative">
+                    <div className="w-32 h-32 rounded-full border border-border p-4 relative">
                       <div className="absolute inset-0 m-4 rounded-full bg-blue-500 opacity-80" style={{ clipPath: 'polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 50% 100%)' }}></div>
                       <div className="absolute inset-0 m-4 rounded-full bg-green-500 opacity-80" style={{ clipPath: 'polygon(50% 50%, 50% 0, 0 0, 0 65%, 50% 65%)' }}></div>
                       <div className="absolute inset-0 m-4 rounded-full bg-amber-500 opacity-80" style={{ clipPath: 'polygon(50% 50%, 50% 100%, 0 100%, 0 65%, 50% 65%)' }}></div>
@@ -127,10 +127,10 @@ const Statistics = () => {
                 </CardTitle>
                 <CardDescription>За последний месяц</CardDescription>
               </CardHeader>
-              <CardContent className="h-60 flex items-center justify-center">
+              <CardContent className="h-48 flex items-center justify-center">
                 {dataState.nutrition ? (
                   <div className="flex flex-col items-center justify-center text-center">
-                    <div className="w-full h-40 border border-border rounded-md p-4 flex items-center justify-center">
+                    <div className="w-full h-32 border border-border rounded-md p-4 flex items-center justify-center">
                       <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
                         <path 
                           d="M0,40 C10,35 20,20 30,25 C40,30 50,10 60,15 C70,20 80,30 90,25 L90,50 L0,50 Z" 
@@ -163,10 +163,10 @@ const Statistics = () => {
               <CardTitle>Статистика активности</CardTitle>
               <CardDescription>Данные о ваших тренировках и шагах</CardDescription>
             </CardHeader>
-            <CardContent className="h-80 flex items-center justify-center">
+            <CardContent className="h-60 flex items-center justify-center">
               {dataState.activity ? (
                 <div className="flex flex-col items-center justify-center text-center">
-                  <div className="w-full h-60 border border-border rounded-md p-4 flex items-center justify-center">
+                  <div className="w-full h-48 border border-border rounded-md p-4 flex items-center justify-center">
                     <div className="flex items-end h-full gap-3 w-full justify-center">
                       {[5000, 7500, 10000, 8000, 12000, 6000, 9000].map((value, i) => (
                         <div key={i} className="w-16 flex flex-col items-center">
@@ -201,10 +201,10 @@ const Statistics = () => {
               <CardTitle>Динамика веса</CardTitle>
               <CardDescription>Изменение веса с течением времени</CardDescription>
             </CardHeader>
-            <CardContent className="h-80 flex items-center justify-center">
+            <CardContent className="h-60 flex items-center justify-center">
               {dataState.weight ? (
                 <div className="flex flex-col items-center justify-center text-center">
-                  <div className="w-full h-60 border border-border rounded-md p-4 flex items-center justify-center">
+                  <div className="w-full h-48 border border-border rounded-md p-4 flex items-center justify-center">
                     <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
                       <path 
                         d="M0,25 C10,24 20,23 30,22 C40,21 50,20 60,18 C70,16 80,14 90,12" 

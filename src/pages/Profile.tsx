@@ -1,14 +1,123 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Settings, Bell, Shield, FileText, TrendingUp, Trophy, Mail, Phone, MapPin, Calendar, Edit, Globe } from "lucide-react";
+import { User, Settings, Bell, Shield, FileText, TrendingUp, Trophy, Mail, Phone, MapPin, Calendar, Edit, Globe, Apple } from "lucide-react";
+import { toast } from "sonner";
 
 const Profile = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "Александр",
+    lastName: "Иванов",
+    email: "alex@example.com",
+    phone: "+7 (XXX) XXX-XX-XX",
+    height: "178",
+    weight: "75.2",
+    birthdate: "1990-01-01"
+  });
+
+  // Стейт для настроек переключателей
+  const [switches, setSwitches] = useState({
+    nutrition: true,
+    achievements: true,
+    reports: true,
+    news: false,
+    tips: true,
+    analytics: true,
+    recommendations: true
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+    toast.info("Режим редактирования", {
+      description: "Теперь вы можете изменить данные своего профиля"
+    });
+  };
+
+  const handleSaveProfile = () => {
+    setIsEditing(false);
+    toast.success("Профиль обновлен", {
+      description: "Данные профиля успешно сохранены"
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    toast.info("Редактирование отменено", {
+      description: "Изменения не были сохранены"
+    });
+  };
+
+  const handleToggleSwitch = (key: keyof typeof switches) => {
+    setSwitches(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+    
+    const newValue = !switches[key];
+    toast.success(`Настройка ${newValue ? "включена" : "отключена"}`, {
+      description: `${key} ${newValue ? "активировано" : "деактивировано"}`
+    });
+  };
+
+  const handleResetSettings = () => {
+    toast.success("Настройки сброшены", {
+      description: "Все настройки восстановлены по умолчанию"
+    });
+  };
+
+  const handleSaveSettings = () => {
+    toast.success("Настройки сохранены", {
+      description: "Ваши настройки применены"
+    });
+  };
+
+  const handleDisableAll = () => {
+    setSwitches({
+      nutrition: false,
+      achievements: false,
+      reports: false,
+      news: false,
+      tips: false,
+      analytics: false,
+      recommendations: false
+    });
+    toast.success("Все уведомления отключены", {
+      description: "Вы не будете получать никаких уведомлений"
+    });
+  };
+
+  const handleSaveNotifications = () => {
+    toast.success("Настройки уведомлений сохранены", {
+      description: "Ваши предпочтения по уведомлениям применены"
+    });
+  };
+
+  const handleSecurityAction = (action: string) => {
+    toast.success(action, {
+      description: `Переход к настройке: ${action}`
+    });
+  };
+
+  const handleDeleteData = () => {
+    toast.error("Удаление данных", {
+      description: "Вы уверены, что хотите удалить все данные? Это действие необратимо."
+    });
+  };
+
   return (
     <div className="container mx-auto">
       <div className="mb-8">
@@ -32,11 +141,11 @@ const Profile = () => {
                 </div>
               </div>
               <CardTitle>Александр</CardTitle>
-              <CardDescription className="flex items-center justify-center gap-1 mt-1">
+              <div className="flex items-center justify-center gap-1 mt-1">
                 <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
                   Бесплатный план
                 </Badge>
-              </CardDescription>
+              </div>
             </CardHeader>
             <CardContent className="pb-6">
               <div className="space-y-4">
@@ -63,7 +172,7 @@ const Profile = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Редактировать профиль</Button>
+              <Button className="w-full" onClick={handleEditProfile}>Редактировать профиль</Button>
             </CardFooter>
           </Card>
 
@@ -83,7 +192,7 @@ const Profile = () => {
                     <p className="text-xs text-muted-foreground">3 из 24 получено</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">Просмотр</Button>
+                <Button variant="outline" size="sm" onClick={() => toast.success("Достижения", { description: "Открываем страницу с вашими достижениями" })}>Просмотр</Button>
               </div>
 
               <div className="flex items-center justify-between">
@@ -133,45 +242,84 @@ const Profile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label htmlFor="firstName" className="text-sm font-medium">Имя</label>
-                      <Input id="firstName" defaultValue="Александр" />
+                      <Input 
+                        id="firstName" 
+                        value={formData.firstName} 
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="lastName" className="text-sm font-medium">Фамилия</label>
-                      <Input id="lastName" defaultValue="Иванов" />
+                      <Input 
+                        id="lastName" 
+                        value={formData.lastName} 
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium">Email</label>
-                    <Input id="email" type="email" defaultValue="alex@example.com" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={formData.email} 
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                    />
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="phone" className="text-sm font-medium">Телефон</label>
-                    <Input id="phone" defaultValue="+7 (XXX) XXX-XX-XX" />
+                    <Input 
+                      id="phone" 
+                      value={formData.phone} 
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                    />
                   </div>
 
                   <Separator />
 
                   <div className="space-y-2">
                     <label htmlFor="height" className="text-sm font-medium">Рост (см)</label>
-                    <Input id="height" type="number" defaultValue="178" />
+                    <Input 
+                      id="height" 
+                      type="number" 
+                      value={formData.height} 
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label htmlFor="weight" className="text-sm font-medium">Вес (кг)</label>
-                      <Input id="weight" type="number" defaultValue="75.2" />
+                      <Input 
+                        id="weight" 
+                        type="number" 
+                        value={formData.weight} 
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="birthdate" className="text-sm font-medium">Дата рождения</label>
-                      <Input id="birthdate" type="date" defaultValue="1990-01-01" />
+                      <Input 
+                        id="birthdate" 
+                        type="date" 
+                        value={formData.birthdate} 
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button variant="outline">Отмена</Button>
-                  <Button>Сохранить изменения</Button>
+                  <Button variant="outline" onClick={handleCancelEdit} disabled={!isEditing}>Отмена</Button>
+                  <Button onClick={handleSaveProfile} disabled={!isEditing}>Сохранить изменения</Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -231,8 +379,11 @@ const Profile = () => {
                           Автоматически рассчитывать нутриенты на основе ваших целей
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.nutrition ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('nutrition')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.nutrition ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
 
@@ -243,15 +394,18 @@ const Profile = () => {
                           Включить напоминания о внесении данных о питании
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.achievements ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('achievements')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.achievements ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button variant="outline">Восстановить настройки по умолчанию</Button>
-                  <Button>Сохранить</Button>
+                  <Button variant="outline" onClick={handleResetSettings}>Восстановить настройки по умолчанию</Button>
+                  <Button onClick={handleSaveSettings}>Сохранить</Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -273,8 +427,11 @@ const Profile = () => {
                           Напоминания о необходимости внести данные о приемах пищи
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.nutrition ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('nutrition')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.nutrition ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
 
@@ -285,8 +442,11 @@ const Profile = () => {
                           Уведомления о полученных достижениях и наградах
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.achievements ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('achievements')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.achievements ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
 
@@ -297,8 +457,11 @@ const Profile = () => {
                           Еженедельные отчеты о прогрессе и аналитика
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.reports ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('reports')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.reports ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
                   </div>
@@ -315,8 +478,11 @@ const Profile = () => {
                           Информация о новых функциях и обновлениях приложения
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-muted relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute left-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.news ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('news')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.news ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
 
@@ -327,15 +493,18 @@ const Profile = () => {
                           Полезные статьи и советы по правильному питанию
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.tips ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('tips')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.tips ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button variant="outline">Отключить все</Button>
-                  <Button>Сохранить настройки</Button>
+                  <Button variant="outline" onClick={handleDisableAll}>Отключить все</Button>
+                  <Button onClick={handleSaveNotifications}>Сохранить настройки</Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -351,11 +520,11 @@ const Profile = () => {
                     <h3 className="text-sm font-medium">Безопасность аккаунта</h3>
 
                     <div className="space-y-2">
-                      <Button variant="outline" className="w-full justify-start">
+                      <Button variant="outline" className="w-full justify-start" onClick={() => handleSecurityAction("Изменение пароля")}>
                         <Shield className="h-4 w-4 mr-2" />
                         Изменить пароль
                       </Button>
-                      <Button variant="outline" className="w-full justify-start">
+                      <Button variant="outline" className="w-full justify-start" onClick={() => handleSecurityAction("Двухфакторная аутентификация")}>
                         <FileText className="h-4 w-4 mr-2" />
                         Двухфакторная аутентификация
                       </Button>
@@ -374,8 +543,11 @@ const Profile = () => {
                           Разрешить использовать анонимные данные для улучшения сервиса
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.analytics ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('analytics')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.analytics ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
 
@@ -386,8 +558,11 @@ const Profile = () => {
                           Получать рекомендации на основе ваших данных
                         </p>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-primary relative flex items-center px-1">
-                        <div className="h-4 w-4 rounded-full bg-white absolute right-1"></div>
+                      <div 
+                        className={`h-6 w-11 rounded-full relative flex items-center px-1 cursor-pointer ${switches.recommendations ? 'bg-primary' : 'bg-muted'}`}
+                        onClick={() => handleToggleSwitch('recommendations')}
+                      >
+                        <div className={`h-4 w-4 rounded-full bg-white absolute ${switches.recommendations ? 'right-1' : 'left-1'} transition-all`}></div>
                       </div>
                     </div>
                   </div>
@@ -395,7 +570,7 @@ const Profile = () => {
                   <Separator />
 
                   <div className="space-y-2">
-                    <Button variant="destructive" className="w-full">
+                    <Button variant="destructive" className="w-full" onClick={handleDeleteData}>
                       Удалить все данные и историю
                     </Button>
                     <p className="text-xs text-muted-foreground text-center">
