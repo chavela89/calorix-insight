@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Activity, Weight, Plus, ArrowUp, ArrowDown, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -23,38 +22,156 @@ const Health = () => {
   const [healthParamName, setHealthParamName] = useState("");
   const [healthParamValue, setHealthParamValue] = useState("");
 
-  const handlePulseSubmit = (e: React.FormEvent) => {
+  // Health data state
+  const [healthData, setHealthData] = useState({
+    pulse: { value: 72, trend: -3, date: "сегодня" },
+    weight: { value: 75.2, trend: -0.8, date: "утро 26.02" },
+    activity: { value: 5432, goal: 10000, date: "сегодня" },
+    history: [
+      { type: 'weight', value: 75.2, trend: -0.3, date: '26.02.2025' },
+      { type: 'activity', description: 'Кардио, 45 минут, 320 ккал', date: '25.02.2025' },
+      { type: 'pulse', value: 72, trend: -2, date: '24.02.2025' }
+    ],
+    params: {
+      height: 178,
+      bmi: 23.7,
+      bmiStatus: 'Норма',
+      pressure: '120/80',
+      fatPercentage: 16.4
+    }
+  });
+
+  const handlePulseSubmit = (e) => {
     e.preventDefault();
+    
+    const numericValue = Number(pulseValue);
+    if (isNaN(numericValue)) {
+      toast.error("Некорректное значение", {
+        description: "Пожалуйста, введите числовое значение пульса"
+      });
+      return;
+    }
+    
+    // Update health data
+    const oldValue = healthData.pulse.value;
+    const trend = numericValue - oldValue;
+    
+    setHealthData(prev => ({
+      ...prev,
+      pulse: { 
+        value: numericValue, 
+        trend: trend, 
+        date: "сегодня" 
+      },
+      history: [
+        { 
+          type: 'pulse', 
+          value: numericValue, 
+          trend: trend, 
+          date: new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '.') 
+        },
+        ...prev.history
+      ]
+    }));
+    
     toast.success("Данные о пульсе сохранены", {
-      description: `Текущий пульс: ${pulseValue} уд/мин`,
+      description: `Текущий пульс: ${numericValue} уд/мин`,
     });
+    
     setPulseValue("");
     setOpenPulseDialog(false);
   };
 
-  const handleWeightSubmit = (e: React.FormEvent) => {
+  const handleWeightSubmit = (e) => {
     e.preventDefault();
+    
+    const numericValue = Number(weightValue);
+    if (isNaN(numericValue)) {
+      toast.error("Некорректное значение", {
+        description: "Пожалуйста, введите числовое значение веса"
+      });
+      return;
+    }
+    
+    // Update health data
+    const oldValue = healthData.weight.value;
+    const trend = +(numericValue - oldValue).toFixed(1);
+    
+    setHealthData(prev => ({
+      ...prev,
+      weight: { 
+        value: numericValue, 
+        trend: trend, 
+        date: `утро ${new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'}).replace(/\//g, '.')}` 
+      },
+      history: [
+        { 
+          type: 'weight', 
+          value: numericValue, 
+          trend: trend, 
+          date: new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '.') 
+        },
+        ...prev.history
+      ],
+      // Recalculate BMI
+      params: {
+        ...prev.params,
+        bmi: +(numericValue / Math.pow(prev.params.height/100, 2)).toFixed(1)
+      }
+    }));
+    
     toast.success("Данные о весе сохранены", {
-      description: `Текущий вес: ${weightValue} кг`,
+      description: `Текущий вес: ${numericValue} кг`,
     });
+    
     setWeightValue("");
     setOpenWeightDialog(false);
   };
 
-  const handleActivitySubmit = (e: React.FormEvent) => {
+  const handleActivitySubmit = (e) => {
     e.preventDefault();
+    
+    const numericValue = Number(stepsValue);
+    if (isNaN(numericValue)) {
+      toast.error("Некорректное значение", {
+        description: "Пожалуйста, введите числовое значение шагов"
+      });
+      return;
+    }
+    
+    // Update health data
+    setHealthData(prev => ({
+      ...prev,
+      activity: { 
+        value: numericValue, 
+        goal: prev.activity.goal, 
+        date: "сегодня" 
+      }
+    }));
+    
     toast.success("Данные об активности сохранены", {
-      description: `Текущее количество шагов: ${stepsValue}`,
+      description: `Текущее количество шагов: ${numericValue}`,
     });
+    
     setStepsValue("");
     setOpenActivityDialog(false);
   };
 
-  const handleHealthParamSubmit = (e: React.FormEvent) => {
+  const handleHealthParamSubmit = (e) => {
     e.preventDefault();
+    
+    if (!healthParamName.trim() || !healthParamValue.trim()) {
+      toast.error("Некорректные данные", {
+        description: "Пожалуйста, заполните все поля"
+      });
+      return;
+    }
+    
+    // Just show toast, no need to update any state since we don't display custom params
     toast.success("Показатель здоровья добавлен", {
       description: `${healthParamName}: ${healthParamValue}`,
     });
+    
     setHealthParamName("");
     setHealthParamValue("");
     setOpenHealthParamDialog(false);
@@ -83,11 +200,22 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center py-4">
-              <div className="text-4xl font-bold mb-1">72</div>
+              <div className="text-4xl font-bold mb-1">{healthData.pulse.value}</div>
               <div className="text-sm text-muted-foreground mb-4">уд/мин (в покое)</div>
               <div className="flex items-center text-sm text-muted-foreground">
-                <ArrowDown className="h-4 w-4 text-green-500 mr-1" />
-                <span>3 уд/мин за неделю</span>
+                {healthData.pulse.trend < 0 ? (
+                  <>
+                    <ArrowDown className="h-4 w-4 text-green-500 mr-1" />
+                    <span>{Math.abs(healthData.pulse.trend)} уд/мин за неделю</span>
+                  </>
+                ) : healthData.pulse.trend > 0 ? (
+                  <>
+                    <ArrowUp className="h-4 w-4 text-red-500 mr-1" />
+                    <span>{healthData.pulse.trend} уд/мин за неделю</span>
+                  </>
+                ) : (
+                  <span>Без изменений за неделю</span>
+                )}
               </div>
             </div>
           </CardContent>
@@ -108,11 +236,22 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center py-4">
-              <div className="text-4xl font-bold mb-1">75.2</div>
-              <div className="text-sm text-muted-foreground mb-4">кг (утро 26.02)</div>
+              <div className="text-4xl font-bold mb-1">{healthData.weight.value}</div>
+              <div className="text-sm text-muted-foreground mb-4">кг ({healthData.weight.date})</div>
               <div className="flex items-center text-sm text-muted-foreground">
-                <ArrowDown className="h-4 w-4 text-green-500 mr-1" />
-                <span>0.8 кг за неделю</span>
+                {healthData.weight.trend < 0 ? (
+                  <>
+                    <ArrowDown className="h-4 w-4 text-green-500 mr-1" />
+                    <span>{Math.abs(healthData.weight.trend)} кг за неделю</span>
+                  </>
+                ) : healthData.weight.trend > 0 ? (
+                  <>
+                    <ArrowUp className="h-4 w-4 text-red-500 mr-1" />
+                    <span>{healthData.weight.trend} кг за неделю</span>
+                  </>
+                ) : (
+                  <span>Без изменений за неделю</span>
+                )}
               </div>
             </div>
           </CardContent>
@@ -133,14 +272,14 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center py-4">
-              <div className="text-4xl font-bold mb-1">5,432</div>
+              <div className="text-4xl font-bold mb-1">{healthData.activity.value.toLocaleString()}</div>
               <div className="text-sm text-muted-foreground mb-4">шагов сегодня</div>
               <div className="space-y-2 w-full">
                 <div className="flex items-center justify-between text-sm">
                   <span>Цель</span>
-                  <span>5,432 / 10,000</span>
+                  <span>{healthData.activity.value.toLocaleString()} / {healthData.activity.goal.toLocaleString()}</span>
                 </div>
-                <Progress value={54} className="h-2" />
+                <Progress value={(healthData.activity.value / healthData.activity.goal) * 100} className="h-2" />
               </div>
             </div>
           </CardContent>
@@ -155,56 +294,55 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-start gap-4 p-3 rounded-md hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 text-primary">
-                  <Weight className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Вес</h4>
-                    <span className="text-sm text-muted-foreground">26.02.2025</span>
+              {healthData.history.map((record, index) => (
+                <React.Fragment key={index}>
+                  {index > 0 && <Separator />}
+                  <div className="flex items-start gap-4 p-3 rounded-md hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 text-primary">
+                      {record.type === 'weight' ? (
+                        <Weight className="h-5 w-5" />
+                      ) : record.type === 'pulse' ? (
+                        <Heart className="h-5 w-5" />
+                      ) : (
+                        <Activity className="h-5 w-5" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">
+                          {record.type === 'weight' 
+                            ? 'Вес' 
+                            : record.type === 'pulse' 
+                            ? 'Пульс' 
+                            : 'Тренировка'}
+                        </h4>
+                        <span className="text-sm text-muted-foreground">{record.date}</span>
+                      </div>
+                      {record.type === 'weight' || record.type === 'pulse' ? (
+                        <div className="flex items-center gap-2 mt-1">
+                          <span>
+                            {record.value} {record.type === 'weight' ? 'кг' : 'уд/мин'}
+                          </span>
+                          {record.trend && (
+                            <>
+                              {record.trend < 0 ? (
+                                <ArrowDown className="h-3 w-3 text-green-500" />
+                              ) : (
+                                <ArrowUp className="h-3 w-3 text-red-500" />
+                              )}
+                              <span className={record.trend < 0 ? "text-sm text-green-500" : "text-sm text-red-500"}>
+                                {record.trend < 0 ? `-${Math.abs(record.trend)}` : `+${record.trend}`} {record.type === 'weight' ? 'кг' : 'уд/мин'}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-muted-foreground mt-1">{record.description}</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span>75.2 кг</span>
-                    <ArrowDown className="h-3 w-3 text-green-500" />
-                    <span className="text-sm text-green-500">-0.3 кг</span>
-                  </div>
-                </div>
-              </div>
-              
-              <Separator />
-              
-              <div className="flex items-start gap-4 p-3 rounded-md hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 text-primary">
-                  <Activity className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Тренировка</h4>
-                    <span className="text-sm text-muted-foreground">25.02.2025</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">Кардио, 45 минут, 320 ккал</p>
-                </div>
-              </div>
-              
-              <Separator />
-              
-              <div className="flex items-start gap-4 p-3 rounded-md hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 text-primary">
-                  <Heart className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Пульс</h4>
-                    <span className="text-sm text-muted-foreground">24.02.2025</span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span>72 уд/мин</span>
-                    <ArrowDown className="h-3 w-3 text-green-500" />
-                    <span className="text-sm text-green-500">-2 уд/мин</span>
-                  </div>
-                </div>
-              </div>
+                </React.Fragment>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -219,7 +357,7 @@ const Health = () => {
               <div className="p-4 border rounded-md">
                 <div className="text-sm text-muted-foreground mb-1">Рост</div>
                 <div className="flex items-end justify-between">
-                  <div className="text-2xl font-semibold">178</div>
+                  <div className="text-2xl font-semibold">{healthData.params.height}</div>
                   <div className="text-sm text-muted-foreground">см</div>
                 </div>
               </div>
@@ -227,15 +365,15 @@ const Health = () => {
               <div className="p-4 border rounded-md">
                 <div className="text-sm text-muted-foreground mb-1">Индекс массы тела</div>
                 <div className="flex items-end justify-between">
-                  <div className="text-2xl font-semibold">23.7</div>
-                  <div className="text-sm text-green-500">Норма</div>
+                  <div className="text-2xl font-semibold">{healthData.params.bmi}</div>
+                  <div className="text-sm text-green-500">{healthData.params.bmiStatus}</div>
                 </div>
               </div>
               
               <div className="p-4 border rounded-md">
                 <div className="text-sm text-muted-foreground mb-1">Давление</div>
                 <div className="flex items-end justify-between">
-                  <div className="text-2xl font-semibold">120/80</div>
+                  <div className="text-2xl font-semibold">{healthData.params.pressure}</div>
                   <div className="text-sm text-muted-foreground">мм рт.ст.</div>
                 </div>
               </div>
@@ -243,7 +381,7 @@ const Health = () => {
               <div className="p-4 border rounded-md">
                 <div className="text-sm text-muted-foreground mb-1">% жира</div>
                 <div className="flex items-end justify-between">
-                  <div className="text-2xl font-semibold">16.4%</div>
+                  <div className="text-2xl font-semibold">{healthData.params.fatPercentage}%</div>
                   <History className="h-4 w-4 text-muted-foreground" />
                 </div>
               </div>

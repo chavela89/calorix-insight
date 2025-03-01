@@ -1,13 +1,12 @@
-
 import React, { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import Header from "@/components/layout/Header"; // Fixed import to use default export
-import { Sidebar } from "@/components/layout/Sidebar";
+import Sidebar from "@/components/layout/Sidebar";
+import Header from "@/components/layout/Header";
+import { useNavigate } from "react-router-dom";
 
-export function Layout() {
+export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-
+  
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -17,12 +16,12 @@ export function Layout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-      <div className="flex flex-col flex-1 md:ml-60">
-        <Header toggleSidebar={toggleSidebar} goBack={goBack} />
-        <main className="flex-1 py-6 px-4 sm:px-6 md:px-8">
-          <Outlet />
+    <div className="flex flex-col min-h-screen h-full">
+      <Header goBack={goBack} />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+        <main className="flex-1 overflow-y-auto bg-background">
+          {children}
         </main>
       </div>
     </div>

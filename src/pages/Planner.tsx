@@ -1,22 +1,51 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Planner = () => {
+  const [openMealDialog, setOpenMealDialog] = useState(false);
+  const [openTemplateDialog, setOpenTemplateDialog] = useState(false);
+  const [mealName, setMealName] = useState("");
+  const [mealTime, setMealTime] = useState("");
+  const [mealType, setMealType] = useState("breakfast");
+  const [templateName, setTemplateName] = useState("");
+  const [templateDescription, setTemplateDescription] = useState("");
+
   const handleAddMeal = () => {
-    toast.success("Добавление приема пищи", {
-      description: "Открыта форма добавления нового приема пищи"
-    });
+    setOpenMealDialog(true);
   };
   
   const handleCreateTemplate = () => {
-    toast.success("Создание шаблона", {
-      description: "Открыта форма создания нового шаблона питания"
+    setOpenTemplateDialog(true);
+  };
+
+  const handleMealSubmit = (e) => {
+    e.preventDefault();
+    toast.success("Прием пищи добавлен", {
+      description: `${mealName} запланирован на ${mealTime}`
     });
+    setMealName("");
+    setMealTime("");
+    setMealType("breakfast");
+    setOpenMealDialog(false);
+  };
+
+  const handleTemplateSubmit = (e) => {
+    e.preventDefault();
+    toast.success("Шаблон создан", {
+      description: `Шаблон "${templateName}" успешно создан`
+    });
+    setTemplateName("");
+    setTemplateDescription("");
+    setOpenTemplateDialog(false);
   };
 
   return (
@@ -131,6 +160,115 @@ const Planner = () => {
           </Card>
         </div>
       </div>
+
+      {/* Meal dialog */}
+      <Dialog open={openMealDialog} onOpenChange={setOpenMealDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Добавление приема пищи</DialogTitle>
+            <DialogDescription>
+              Заполните информацию о новом приеме пищи
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleMealSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="meal-type" className="text-right">
+                  Тип
+                </Label>
+                <Select 
+                  value={mealType} 
+                  onValueChange={setMealType}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Выберите тип приема пищи" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="breakfast">Завтрак</SelectItem>
+                    <SelectItem value="lunch">Обед</SelectItem>
+                    <SelectItem value="dinner">Ужин</SelectItem>
+                    <SelectItem value="snack">Перекус</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="meal-name" className="text-right">
+                  Название
+                </Label>
+                <Input
+                  id="meal-name"
+                  value={mealName}
+                  onChange={(e) => setMealName(e.target.value)}
+                  className="col-span-3"
+                  placeholder="Название блюда"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="meal-time" className="text-right">
+                  Время
+                </Label>
+                <Input
+                  id="meal-time"
+                  type="time"
+                  value={mealTime}
+                  onChange={(e) => setMealTime(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Добавить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Template dialog */}
+      <Dialog open={openTemplateDialog} onOpenChange={setOpenTemplateDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Создание шаблона</DialogTitle>
+            <DialogDescription>
+              Создайте новый шаблон питания для повторного использования
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleTemplateSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="template-name" className="text-right">
+                  Название
+                </Label>
+                <Input
+                  id="template-name"
+                  value={templateName}
+                  onChange={(e) => setTemplateName(e.target.value)}
+                  className="col-span-3"
+                  placeholder="Название шаблона"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="template-description" className="text-right">
+                  Описание
+                </Label>
+                <Input
+                  id="template-description"
+                  value={templateDescription}
+                  onChange={(e) => setTemplateDescription(e.target.value)}
+                  className="col-span-3"
+                  placeholder="Краткое описание"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Создать</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
