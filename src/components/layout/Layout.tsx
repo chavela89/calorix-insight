@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Header } from "@/components/layout/Header";
+import Header from "@/components/layout/Header"; // Fixed import to use default export
 import { Sidebar } from "@/components/layout/Sidebar";
 
 export function Layout() {

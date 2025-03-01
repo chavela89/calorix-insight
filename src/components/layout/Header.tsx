@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { UserButton } from "@/components/ui/sidebar";
+import { User2 } from "lucide-react"; // Changed from UserButton to User2 icon
 import { BellIcon, ArrowLeft, Apple } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -29,7 +29,7 @@ export default function Header() {
           <BellIcon className="h-5 w-5" />
         </Button>
         <Button variant="ghost" size="icon">
-          <UserButton />
+          <User2 className="h-5 w-5" /> {/* Changed to use User2 icon directly */}
         </Button>
       </div>
     </header>
