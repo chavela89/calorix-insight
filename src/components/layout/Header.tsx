@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ThemeSelector } from "@/components/ui/theme-selector";
-import { Bell, Menu, User } from "lucide-react";
+import { ArrowLeft, Bell, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,9 +15,10 @@ import { Badge } from "@/components/ui/badge";
 
 interface HeaderProps {
   toggleSidebar: () => void;
+  goBack: () => void;
 }
 
-export function Header({ toggleSidebar }: HeaderProps) {
+export function Header({ toggleSidebar, goBack }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-md border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -30,6 +31,15 @@ export function Header({ toggleSidebar }: HeaderProps) {
           >
             <Menu className="h-5 w-5" />
             <span className="sr-only">Меню</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={goBack}
+            className="mr-1"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span className="sr-only">Назад</span>
           </Button>
           <Link to="/" className="flex items-center gap-2">
             <svg 
