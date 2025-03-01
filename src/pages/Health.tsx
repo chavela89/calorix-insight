@@ -5,8 +5,61 @@ import { Heart, Activity, Weight, Plus, ArrowUp, ArrowDown, History } from "luci
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Health = () => {
+  const [openPulseDialog, setOpenPulseDialog] = useState(false);
+  const [openWeightDialog, setOpenWeightDialog] = useState(false);
+  const [openActivityDialog, setOpenActivityDialog] = useState(false);
+  const [openHealthParamDialog, setOpenHealthParamDialog] = useState(false);
+  
+  const [pulseValue, setPulseValue] = useState("");
+  const [weightValue, setWeightValue] = useState("");
+  const [stepsValue, setStepsValue] = useState("");
+  const [healthParamName, setHealthParamName] = useState("");
+  const [healthParamValue, setHealthParamValue] = useState("");
+
+  const handlePulseSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Данные о пульсе сохранены", {
+      description: `Текущий пульс: ${pulseValue} уд/мин`,
+    });
+    setPulseValue("");
+    setOpenPulseDialog(false);
+  };
+
+  const handleWeightSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Данные о весе сохранены", {
+      description: `Текущий вес: ${weightValue} кг`,
+    });
+    setWeightValue("");
+    setOpenWeightDialog(false);
+  };
+
+  const handleActivitySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Данные об активности сохранены", {
+      description: `Текущее количество шагов: ${stepsValue}`,
+    });
+    setStepsValue("");
+    setOpenActivityDialog(false);
+  };
+
+  const handleHealthParamSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Показатель здоровья добавлен", {
+      description: `${healthParamName}: ${healthParamValue}`,
+    });
+    setHealthParamName("");
+    setHealthParamValue("");
+    setOpenHealthParamDialog(false);
+  };
+
   return (
     <div className="container mx-auto">
       <div className="mb-8">
@@ -22,7 +75,7 @@ const Health = () => {
                 <Heart className="h-5 w-5 text-primary" />
                 Пульс
               </CardTitle>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => setOpenPulseDialog(true)}>
                 <Plus className="h-4 w-4" />
                 <span className="sr-only">Добавить данные</span>
               </Button>
@@ -47,7 +100,7 @@ const Health = () => {
                 <Weight className="h-5 w-5 text-primary" />
                 Вес
               </CardTitle>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => setOpenWeightDialog(true)}>
                 <Plus className="h-4 w-4" />
                 <span className="sr-only">Добавить данные</span>
               </Button>
@@ -72,7 +125,7 @@ const Health = () => {
                 <Activity className="h-5 w-5 text-primary" />
                 Активность
               </CardTitle>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => setOpenActivityDialog(true)}>
                 <Plus className="h-4 w-4" />
                 <span className="sr-only">Добавить данные</span>
               </Button>
@@ -196,13 +249,160 @@ const Health = () => {
               </div>
             </div>
             
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => setOpenHealthParamDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Добавить показатель
             </Button>
           </CardContent>
         </Card>
       </div>
+
+      {/* Pulse input dialog */}
+      <Dialog open={openPulseDialog} onOpenChange={setOpenPulseDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Внесение данных о пульсе</DialogTitle>
+            <DialogDescription>
+              Введите ваш текущий пульс, чтобы отслеживать динамику
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handlePulseSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="pulse" className="text-right">
+                  Пульс
+                </Label>
+                <Input
+                  id="pulse"
+                  type="number"
+                  placeholder="72"
+                  value={pulseValue}
+                  onChange={(e) => setPulseValue(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Сохранить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Weight input dialog */}
+      <Dialog open={openWeightDialog} onOpenChange={setOpenWeightDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Внесение данных о весе</DialogTitle>
+            <DialogDescription>
+              Введите ваш текущий вес, чтобы отслеживать динамику изменений
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleWeightSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="weight" className="text-right">
+                  Вес
+                </Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  step="0.1"
+                  placeholder="70.5"
+                  value={weightValue}
+                  onChange={(e) => setWeightValue(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Сохранить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Activity input dialog */}
+      <Dialog open={openActivityDialog} onOpenChange={setOpenActivityDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Внесение данных об активности</DialogTitle>
+            <DialogDescription>
+              Введите количество шагов или другие данные об активности
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleActivitySubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="steps" className="text-right">
+                  Шаги
+                </Label>
+                <Input
+                  id="steps"
+                  type="number"
+                  placeholder="5000"
+                  value={stepsValue}
+                  onChange={(e) => setStepsValue(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Сохранить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Health parameter input dialog */}
+      <Dialog open={openHealthParamDialog} onOpenChange={setOpenHealthParamDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Добавление показателя здоровья</DialogTitle>
+            <DialogDescription>
+              Введите название и значение нового показателя здоровья
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleHealthParamSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="paramName" className="text-right">
+                  Название
+                </Label>
+                <Input
+                  id="paramName"
+                  type="text"
+                  placeholder="Холестерин"
+                  value={healthParamName}
+                  onChange={(e) => setHealthParamName(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="paramValue" className="text-right">
+                  Значение
+                </Label>
+                <Input
+                  id="paramValue"
+                  type="text"
+                  placeholder="5.2 ммоль/л"
+                  value={healthParamValue}
+                  onChange={(e) => setHealthParamValue(e.target.value)}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Сохранить</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

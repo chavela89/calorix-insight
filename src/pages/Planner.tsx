@@ -4,8 +4,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 const Planner = () => {
+  const handleAddMeal = () => {
+    toast.success("Добавление приема пищи", {
+      description: "Открыта форма добавления нового приема пищи"
+    });
+  };
+  
+  const handleCreateTemplate = () => {
+    toast.success("Создание шаблона", {
+      description: "Открыта форма создания нового шаблона питания"
+    });
+  };
+
   return (
     <div className="container mx-auto">
       <div className="mb-8">
@@ -28,7 +41,7 @@ const Planner = () => {
             <span className="sr-only">Следующий день</span>
           </Button>
         </div>
-        <Button>
+        <Button onClick={handleAddMeal}>
           <Plus className="h-4 w-4 mr-2" />
           Добавить
         </Button>
@@ -110,7 +123,7 @@ const Planner = () => {
               <div className="text-center text-muted-foreground mb-4">
                 <p>У вас еще нет созданных шаблонов</p>
               </div>
-              <Button className="w-full">
+              <Button className="w-full" onClick={handleCreateTemplate}>
                 <Plus className="h-4 w-4 mr-2" />
                 Создать шаблон
               </Button>
