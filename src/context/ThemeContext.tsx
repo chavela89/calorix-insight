@@ -22,8 +22,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     // Update document class
     const root = window.document.documentElement;
-    root.classList.remove("light", "dark", "creamy", "blue-gray");
+    root.classList.remove("light", "dark", "creamy", "blue-gray", "green", "coral", "purple", "blue", "yellow");
     root.classList.add(theme);
+    
+    console.log("Theme changed to:", theme);
   }, [theme]);
 
   return (

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Settings as SettingsIcon, Bell, CreditCard, Smartphone, Monitor, Globe, LogOut, HelpCircle, Languages, ChevronRight, Apple } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/context/ThemeContext";
 
 // Language and region data
 const languagesData = [
@@ -108,7 +108,6 @@ const timezonesData = [
   { code: "gmt+14", name: "GMT+14:00", cities: "Остров Рождества (Кирибати)" },
 ];
 
-// Exchange rates (simplified, in real app would use an API)
 const exchangeRates = {
   RUB: 1,
   USD: 0.011,
@@ -138,6 +137,8 @@ const exchangeRates = {
 };
 
 const Settings = () => {
+  const { theme, setTheme } = useTheme();
+
   // Состояние для переключателей настроек
   const [notifications, setNotifications] = useState({
     email: true,
@@ -149,9 +150,6 @@ const Settings = () => {
   });
 
   // Состояние для темы
-  const [theme, setTheme] = useState("system");
-
-  // Состояние для дополнительных настроек
   const [interfaceSettings, setInterfaceSettings] = useState({
     compact: false,
     sidebar: true,
@@ -252,7 +250,7 @@ const Settings = () => {
 
   const handleSectionClick = (section: string) => {
     toast.info(`Переход к разделу "${section}"`, {
-      description: `Выбран раздел "${section}" настроек`
+      description: `Выбра�� раздел "${section}" настроек`
     });
   };
 

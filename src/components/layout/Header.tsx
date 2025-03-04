@@ -13,9 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeType } from "@/types";
 
 const Header = ({ goBack }) => {
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
+  
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -37,9 +41,16 @@ const Header = ({ goBack }) => {
     }
   ]);
 
-  const [themes] = useState([
+  const [themes] = useState<{id: ThemeType, name: string}[]>([
     { id: 'light', name: 'Светлая' },
     { id: 'dark', name: 'Темная' },
+    { id: 'creamy', name: 'Сливочная' },
+    { id: 'blue-gray', name: 'Сине-серая' },
+    { id: 'green', name: 'Зеленая' },
+    { id: 'coral', name: 'Коралловая' },
+    { id: 'purple', name: 'Фиолетовая' },
+    { id: 'blue', name: 'Синяя' },
+    { id: 'yellow', name: 'Желтая' },
     { id: 'system', name: 'Системная' }
   ]);
 
@@ -49,9 +60,11 @@ const Header = ({ goBack }) => {
     });
   };
 
-  const handleThemeChange = (theme) => {
-    toast.success(`Тема изменена: ${theme}`, {
-      description: `Установлена ${theme} тема`
+  const handleThemeChange = (themeId: ThemeType) => {
+    setTheme(themeId);
+    const themeName = themes.find(t => t.id === themeId)?.name || themeId;
+    toast.success(`Тема изменена: ${themeName}`, {
+      description: `Установлена ${themeName} тема`
     });
   };
 
@@ -122,9 +135,13 @@ const Header = ({ goBack }) => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Тема оформления</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {themes.map(theme => (
-              <DropdownMenuItem key={theme.id} onClick={() => handleThemeChange(theme.name)}>
-                {theme.name}
+            {themes.map(themeOption => (
+              <DropdownMenuItem 
+                key={themeOption.id} 
+                onClick={() => handleThemeChange(themeOption.id as ThemeType)}
+                className={theme === themeOption.id ? "bg-muted" : ""}
+              >
+                {themeOption.name} {theme === themeOption.id && "✓"}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
