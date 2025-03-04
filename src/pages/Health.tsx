@@ -9,8 +9,29 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLanguage } from "@/context/LanguageContext";
+
+// Default health data structure
+const defaultHealthData = {
+  pulse: { value: 72, trend: -3, date: "сегодня" },
+  weight: { value: 75.2, trend: -0.8, date: "утро 26.02" },
+  activity: { value: 5432, goal: 10000, date: "сегодня" },
+  history: [
+    { type: 'weight', value: 75.2, trend: -0.3, date: '26.02.2025' },
+    { type: 'activity', description: 'Кардио, 45 минут, 320 ккал', date: '25.02.2025' },
+    { type: 'pulse', value: 72, trend: -2, date: '24.02.2025' }
+  ],
+  params: {
+    height: 178,
+    bmi: 23.7,
+    bmiStatus: 'Норма',
+    pressure: '120/80',
+    fatPercentage: 16.4
+  }
+};
 
 const Health = () => {
+  const { t } = useLanguage();
   const [openPulseDialog, setOpenPulseDialog] = useState(false);
   const [openWeightDialog, setOpenWeightDialog] = useState(false);
   const [openActivityDialog, setOpenActivityDialog] = useState(false);
@@ -22,24 +43,16 @@ const Health = () => {
   const [healthParamName, setHealthParamName] = useState("");
   const [healthParamValue, setHealthParamValue] = useState("");
 
-  // Health data state
-  const [healthData, setHealthData] = useState({
-    pulse: { value: 72, trend: -3, date: "сегодня" },
-    weight: { value: 75.2, trend: -0.8, date: "утро 26.02" },
-    activity: { value: 5432, goal: 10000, date: "сегодня" },
-    history: [
-      { type: 'weight', value: 75.2, trend: -0.3, date: '26.02.2025' },
-      { type: 'activity', description: 'Кардио, 45 минут, 320 ккал', date: '25.02.2025' },
-      { type: 'pulse', value: 72, trend: -2, date: '24.02.2025' }
-    ],
-    params: {
-      height: 178,
-      bmi: 23.7,
-      bmiStatus: 'Норма',
-      pressure: '120/80',
-      fatPercentage: 16.4
-    }
+  // Load health data from localStorage
+  const [healthData, setHealthData] = useState(() => {
+    const savedData = localStorage.getItem("healthData");
+    return savedData ? JSON.parse(savedData) : defaultHealthData;
   });
+
+  // Save to localStorage whenever healthData changes
+  useEffect(() => {
+    localStorage.setItem("healthData", JSON.stringify(healthData));
+  }, [healthData]);
 
   const handlePulseSubmit = (e) => {
     e.preventDefault();
@@ -56,23 +69,26 @@ const Health = () => {
     const oldValue = healthData.pulse.value;
     const trend = numericValue - oldValue;
     
-    setHealthData(prev => ({
-      ...prev,
-      pulse: { 
-        value: numericValue, 
-        trend: trend, 
-        date: "сегодня" 
-      },
-      history: [
-        { 
-          type: 'pulse', 
+    setHealthData(prev => {
+      const newData = {
+        ...prev,
+        pulse: { 
           value: numericValue, 
           trend: trend, 
-          date: new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '.') 
+          date: "сегодня" 
         },
-        ...prev.history
-      ]
-    }));
+        history: [
+          { 
+            type: 'pulse', 
+            value: numericValue, 
+            trend: trend, 
+            date: new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '.') 
+          },
+          ...prev.history
+        ]
+      };
+      return newData;
+    });
     
     toast.success("Данные о пульсе сохранены", {
       description: `Текущий пульс: ${numericValue} уд/мин`,
@@ -97,28 +113,31 @@ const Health = () => {
     const oldValue = healthData.weight.value;
     const trend = +(numericValue - oldValue).toFixed(1);
     
-    setHealthData(prev => ({
-      ...prev,
-      weight: { 
-        value: numericValue, 
-        trend: trend, 
-        date: `утро ${new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'}).replace(/\//g, '.')}` 
-      },
-      history: [
-        { 
-          type: 'weight', 
+    setHealthData(prev => {
+      const newData = {
+        ...prev,
+        weight: { 
           value: numericValue, 
           trend: trend, 
-          date: new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '.') 
+          date: `утро ${new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'}).replace(/\//g, '.')}` 
         },
-        ...prev.history
-      ],
-      // Recalculate BMI
-      params: {
-        ...prev.params,
-        bmi: +(numericValue / Math.pow(prev.params.height/100, 2)).toFixed(1)
-      }
-    }));
+        history: [
+          { 
+            type: 'weight', 
+            value: numericValue, 
+            trend: trend, 
+            date: new Date().toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '.') 
+          },
+          ...prev.history
+        ],
+        // Recalculate BMI
+        params: {
+          ...prev.params,
+          bmi: +(numericValue / Math.pow(prev.params.height/100, 2)).toFixed(1)
+        }
+      };
+      return newData;
+    });
     
     toast.success("Данные о весе сохранены", {
       description: `Текущий вес: ${numericValue} кг`,
@@ -140,14 +159,17 @@ const Health = () => {
     }
     
     // Update health data
-    setHealthData(prev => ({
-      ...prev,
-      activity: { 
-        value: numericValue, 
-        goal: prev.activity.goal, 
-        date: "сегодня" 
-      }
-    }));
+    setHealthData(prev => {
+      const newData = {
+        ...prev,
+        activity: { 
+          value: numericValue, 
+          goal: prev.activity.goal, 
+          date: "сегодня" 
+        }
+      };
+      return newData;
+    });
     
     toast.success("Данные об активности сохранены", {
       description: `Текущее количество шагов: ${numericValue}`,
@@ -180,8 +202,8 @@ const Health = () => {
   return (
     <div className="container mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Здоровье</h1>
-        <p className="text-muted-foreground">Отслеживание показателей здоровья и физической активности</p>
+        <h1 className="text-3xl font-bold mb-2">{t.healthTitle}</h1>
+        <p className="text-muted-foreground">{t.healthDescription}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -190,31 +212,31 @@ const Health = () => {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Heart className="h-5 w-5 text-primary" />
-                Пульс
+                {t.pulse}
               </CardTitle>
               <Button variant="ghost" size="icon" onClick={() => setOpenPulseDialog(true)}>
                 <Plus className="h-4 w-4" />
-                <span className="sr-only">Добавить данные</span>
+                <span className="sr-only">{t.add}</span>
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center py-4">
               <div className="text-4xl font-bold mb-1">{healthData.pulse.value}</div>
-              <div className="text-sm text-muted-foreground mb-4">уд/мин (в покое)</div>
+              <div className="text-sm text-muted-foreground mb-4">{t.beatsPerMin}</div>
               <div className="flex items-center text-sm text-muted-foreground">
                 {healthData.pulse.trend < 0 ? (
                   <>
                     <ArrowDown className="h-4 w-4 text-green-500 mr-1" />
-                    <span>{Math.abs(healthData.pulse.trend)} уд/мин за неделю</span>
+                    <span>{Math.abs(healthData.pulse.trend)} {t.beatsPerMin.split(' ')[0]} {t.weekChange}</span>
                   </>
                 ) : healthData.pulse.trend > 0 ? (
                   <>
                     <ArrowUp className="h-4 w-4 text-red-500 mr-1" />
-                    <span>{healthData.pulse.trend} уд/мин за неделю</span>
+                    <span>{healthData.pulse.trend} {t.beatsPerMin.split(' ')[0]} {t.weekChange}</span>
                   </>
                 ) : (
-                  <span>Без изменений за неделю</span>
+                  <span>{t.noChanges}</span>
                 )}
               </div>
             </div>
@@ -226,31 +248,31 @@ const Health = () => {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Weight className="h-5 w-5 text-primary" />
-                Вес
+                {t.weight}
               </CardTitle>
               <Button variant="ghost" size="icon" onClick={() => setOpenWeightDialog(true)}>
                 <Plus className="h-4 w-4" />
-                <span className="sr-only">Добавить данные</span>
+                <span className="sr-only">{t.add}</span>
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center py-4">
               <div className="text-4xl font-bold mb-1">{healthData.weight.value}</div>
-              <div className="text-sm text-muted-foreground mb-4">кг ({healthData.weight.date})</div>
+              <div className="text-sm text-muted-foreground mb-4">{t.kg} ({healthData.weight.date})</div>
               <div className="flex items-center text-sm text-muted-foreground">
                 {healthData.weight.trend < 0 ? (
                   <>
                     <ArrowDown className="h-4 w-4 text-green-500 mr-1" />
-                    <span>{Math.abs(healthData.weight.trend)} кг за неделю</span>
+                    <span>{Math.abs(healthData.weight.trend)} {t.kg} {t.weekChange}</span>
                   </>
                 ) : healthData.weight.trend > 0 ? (
                   <>
                     <ArrowUp className="h-4 w-4 text-red-500 mr-1" />
-                    <span>{healthData.weight.trend} кг за неделю</span>
+                    <span>{healthData.weight.trend} {t.kg} {t.weekChange}</span>
                   </>
                 ) : (
-                  <span>Без изменений за неделю</span>
+                  <span>{t.noChanges}</span>
                 )}
               </div>
             </div>
@@ -262,21 +284,21 @@ const Health = () => {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Activity className="h-5 w-5 text-primary" />
-                Активность
+                {t.activity}
               </CardTitle>
               <Button variant="ghost" size="icon" onClick={() => setOpenActivityDialog(true)}>
                 <Plus className="h-4 w-4" />
-                <span className="sr-only">Добавить данные</span>
+                <span className="sr-only">{t.add}</span>
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center py-4">
               <div className="text-4xl font-bold mb-1">{healthData.activity.value.toLocaleString()}</div>
-              <div className="text-sm text-muted-foreground mb-4">шагов сегодня</div>
+              <div className="text-sm text-muted-foreground mb-4">{t.stepsToday}</div>
               <div className="space-y-2 w-full">
                 <div className="flex items-center justify-between text-sm">
-                  <span>Цель</span>
+                  <span>{t.goal}</span>
                   <span>{healthData.activity.value.toLocaleString()} / {healthData.activity.goal.toLocaleString()}</span>
                 </div>
                 <Progress value={(healthData.activity.value / healthData.activity.goal) * 100} className="h-2" />
@@ -289,8 +311,8 @@ const Health = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>История измерений</CardTitle>
-            <CardDescription>Последние записи о вашем здоровье</CardDescription>
+            <CardTitle>{t.measurementHistory}</CardTitle>
+            <CardDescription>{t.lastRecords}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -311,17 +333,17 @@ const Health = () => {
                       <div className="flex items-center justify-between">
                         <h4 className="font-medium">
                           {record.type === 'weight' 
-                            ? 'Вес' 
+                            ? t.weight 
                             : record.type === 'pulse' 
-                            ? 'Пульс' 
-                            : 'Тренировка'}
+                            ? t.pulse 
+                            : t.workout}
                         </h4>
                         <span className="text-sm text-muted-foreground">{record.date}</span>
                       </div>
                       {record.type === 'weight' || record.type === 'pulse' ? (
                         <div className="flex items-center gap-2 mt-1">
                           <span>
-                            {record.value} {record.type === 'weight' ? 'кг' : 'уд/мин'}
+                            {record.value} {record.type === 'weight' ? t.kg : t.beatsPerMin.split(' ')[0]}
                           </span>
                           {record.trend && (
                             <>
@@ -331,7 +353,7 @@ const Health = () => {
                                 <ArrowUp className="h-3 w-3 text-red-500" />
                               )}
                               <span className={record.trend < 0 ? "text-sm text-green-500" : "text-sm text-red-500"}>
-                                {record.trend < 0 ? `-${Math.abs(record.trend)}` : `+${record.trend}`} {record.type === 'weight' ? 'кг' : 'уд/мин'}
+                                {record.trend < 0 ? `-${Math.abs(record.trend)}` : `+${record.trend}`} {record.type === 'weight' ? t.kg : t.beatsPerMin.split(' ')[0]}
                               </span>
                             </>
                           )}
@@ -349,37 +371,37 @@ const Health = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Параметры здоровья</CardTitle>
-            <CardDescription>Основные показатели организма</CardDescription>
+            <CardTitle>{t.healthParams}</CardTitle>
+            <CardDescription>{t.mainIndicators}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 border rounded-md">
-                <div className="text-sm text-muted-foreground mb-1">Рост</div>
+                <div className="text-sm text-muted-foreground mb-1">{t.height}</div>
                 <div className="flex items-end justify-between">
                   <div className="text-2xl font-semibold">{healthData.params.height}</div>
-                  <div className="text-sm text-muted-foreground">см</div>
+                  <div className="text-sm text-muted-foreground">{t.cm}</div>
                 </div>
               </div>
               
               <div className="p-4 border rounded-md">
-                <div className="text-sm text-muted-foreground mb-1">Индекс массы тела</div>
+                <div className="text-sm text-muted-foreground mb-1">{t.bmi}</div>
                 <div className="flex items-end justify-between">
                   <div className="text-2xl font-semibold">{healthData.params.bmi}</div>
-                  <div className="text-sm text-green-500">{healthData.params.bmiStatus}</div>
+                  <div className="text-sm text-green-500">{t.normal}</div>
                 </div>
               </div>
               
               <div className="p-4 border rounded-md">
-                <div className="text-sm text-muted-foreground mb-1">Давление</div>
+                <div className="text-sm text-muted-foreground mb-1">{t.pressure}</div>
                 <div className="flex items-end justify-between">
                   <div className="text-2xl font-semibold">{healthData.params.pressure}</div>
-                  <div className="text-sm text-muted-foreground">мм рт.ст.</div>
+                  <div className="text-sm text-muted-foreground">{t.mmHg}</div>
                 </div>
               </div>
               
               <div className="p-4 border rounded-md">
-                <div className="text-sm text-muted-foreground mb-1">% жира</div>
+                <div className="text-sm text-muted-foreground mb-1">{t.fatPercentage}</div>
                 <div className="flex items-end justify-between">
                   <div className="text-2xl font-semibold">{healthData.params.fatPercentage}%</div>
                   <History className="h-4 w-4 text-muted-foreground" />
@@ -389,7 +411,7 @@ const Health = () => {
             
             <Button variant="outline" className="w-full" onClick={() => setOpenHealthParamDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Добавить показатель
+              {t.addIndicator}
             </Button>
           </CardContent>
         </Card>
@@ -399,16 +421,16 @@ const Health = () => {
       <Dialog open={openPulseDialog} onOpenChange={setOpenPulseDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Внесение данных о пульсе</DialogTitle>
+            <DialogTitle>{t.enterPulseData}</DialogTitle>
             <DialogDescription>
-              Введите ваш текущий пульс, чтобы отслеживать динамику
+              {t.enterCurrentPulse}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handlePulseSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="pulse" className="text-right">
-                  Пульс
+                  {t.pulse}
                 </Label>
                 <Input
                   id="pulse"
@@ -422,7 +444,7 @@ const Health = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Сохранить</Button>
+              <Button type="submit">{t.save}</Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -432,16 +454,16 @@ const Health = () => {
       <Dialog open={openWeightDialog} onOpenChange={setOpenWeightDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Внесение данных о весе</DialogTitle>
+            <DialogTitle>{t.enterWeightData}</DialogTitle>
             <DialogDescription>
-              Введите ваш текущий вес, чтобы отслеживать динамику изменений
+              {t.enterCurrentWeight}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleWeightSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="weight" className="text-right">
-                  Вес
+                  {t.weight}
                 </Label>
                 <Input
                   id="weight"
@@ -456,7 +478,7 @@ const Health = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Сохранить</Button>
+              <Button type="submit">{t.save}</Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -466,16 +488,16 @@ const Health = () => {
       <Dialog open={openActivityDialog} onOpenChange={setOpenActivityDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Внесение данных об активности</DialogTitle>
+            <DialogTitle>{t.enterActivityData}</DialogTitle>
             <DialogDescription>
-              Введите количество шагов или другие данные об активности
+              {t.enterStepsData}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleActivitySubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="steps" className="text-right">
-                  Шаги
+                  {t.steps}
                 </Label>
                 <Input
                   id="steps"
@@ -489,7 +511,7 @@ const Health = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Сохранить</Button>
+              <Button type="submit">{t.save}</Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -499,16 +521,16 @@ const Health = () => {
       <Dialog open={openHealthParamDialog} onOpenChange={setOpenHealthParamDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Добавление показателя здоровья</DialogTitle>
+            <DialogTitle>{t.addHealthParam}</DialogTitle>
             <DialogDescription>
-              Введите название и значение нового показателя здоровья
+              {t.enterParamNameValue}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleHealthParamSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="paramName" className="text-right">
-                  Название
+                  {t.paramName}
                 </Label>
                 <Input
                   id="paramName"
@@ -522,7 +544,7 @@ const Health = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="paramValue" className="text-right">
-                  Значение
+                  {t.paramValue}
                 </Label>
                 <Input
                   id="paramValue"
@@ -536,7 +558,7 @@ const Health = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Сохранить</Button>
+              <Button type="submit">{t.save}</Button>
             </DialogFooter>
           </form>
         </DialogContent>

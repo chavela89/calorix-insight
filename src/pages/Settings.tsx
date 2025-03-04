@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Settings as SettingsIcon, Bell, CreditCard, Smartphone, Monitor, Globe, LogOut, HelpCircle, Languages, ChevronRight, Apple } from "lucide-react";
 import { toast } from "sonner";
 import { useTheme } from "@/context/ThemeContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { ThemeType } from "@/types";
 
 const languagesData = [
@@ -136,185 +137,15 @@ const exchangeRates = {
   RON: 0.05,
 };
 
-const translations = {
-  ru: {
-    settings: "Настройки",
-    customize: "Настройте приложение по своему усмотрению",
-    sections: "Разделы настроек",
-    account: "Аккаунт",
-    appearance: "Внешний вид",
-    notifications: "Уведомления",
-    subscription: "Подписка",
-    language: "Язык",
-    help: "Помощь",
-    logout: "Выйти",
-    accountSettings: "Настройки аккаунта",
-    profileSettings: "Управление настройками профиля и аккаунта",
-    accountStatus: "Статус аккаунта",
-    currentPlan: "Ваш текущий план подписки",
-    freePlan: "Бесплатный план",
-    emailNotifications: "Email-уведомления",
-    receiveEmails: "Получать уведомления на почту",
-    syncData: "Синхронизация данных",
-    autoSync: "Автоматически синхронизировать данные между устройствами",
-    interfaceAppearance: "Внешний вид",
-    customizeAppearance: "Настройте внешний вид приложения",
-    theme: "Тема",
-    layout: "Интерфейс",
-    light: "Светлая",
-    dark: "Темная",
-    system: "Системная",
-    compactMode: "Компактный режим",
-    reducePadding: "Уменьшить отступы и размер элементов интерфейса",
-    sidebar: "Боковая панель",
-    showSidebar: "Показывать боковую панель по умолчанию",
-    animations: "Анимации",
-    enableAnimations: "Включить анимации интерфейса",
-    notificationSettings: "Уведомления",
-    customizeNotifications: "Настройте параметры уведомлений",
-    pushNotifications: "Push-уведомления",
-    receivePush: "Получать уведомления в браузере",
-    mealReminders: "Напоминания о питании",
-    getMealReminders: "Получать напоминания о приемах пищи",
-    achievements: "Достижения",
-    achievementNotifications: "Уведомления о полученных достижениях",
-    weeklyReports: "Еженедельные отчеты",
-    getWeeklyReports: "Получать еженедельные отчеты о прогрессе",
-    subscriptionBilling: "Подписка и оплата",
-    manageSubscription: "Управление подпиской и платежной информацией",
-    currentPlanTitle: "Текущий план",
-    active: "Активен",
-    basicTracking: "Базовое отслеживание калорий",
-    limitedHistory: "Ограниченная история приемов пищи",
-    basicReports: "Основные отчеты",
-    availablePlans: "Доступные планы",
-    premium: "Премиум",
-    month: "месяц",
-    advancedAnalytics: "Расширенная аналитика",
-    aiRecommendations: "Персональные рекомендации AI",
-    unlimitedHistory: "Неограниченная история",
-    noAds: "Без рекламы",
-    subscribe: "Оформить подписку",
-    yearlyPlan: "Годовой план",
-    year: "год",
-    savings: "Экономия 40%",
-    allPremiumFeatures: "Все функции Премиум",
-    prioritySupport: "Приоритетная поддержка",
-    dataExport: "Экспорт данных",
-    languageRegion: "Язык и регион",
-    customizeLanguage: "Настройте язык и региональные параметры",
-    appLanguage: "Язык приложения",
-    region: "Регион",
-    timezone: "Часовой пояс",
-    saveSettings: "Сохранить настройки",
-    helpSupport: "Помощь и поддержка",
-    getHelp: "Получите помощь по использованию приложения",
-    supportCenter: "Центр поддержки",
-    faqInstructions: "Ответы на часто задаваемые вопросы и инструкции",
-    contactUs: "Свяжитесь с нами",
-    contactSupport: "Напишите в службу поддержки, если у вас возникли проблемы",
-    tutorials: "Обучающие материалы",
-    tutorialDescription: "Видеоуроки и инструкции по использованию приложения",
-    reportProblem: "Сообщить о проблеме",
-    reportBugs: "Сообщите нам о найденных ошибках или проблемах",
-    appVersion: "Версия приложения: 1.0.0"
-  },
-  en: {
-    settings: "Settings",
-    customize: "Customize the application to your liking",
-    sections: "Setting Sections",
-    account: "Account",
-    appearance: "Appearance",
-    notifications: "Notifications",
-    subscription: "Subscription",
-    language: "Language",
-    help: "Help",
-    logout: "Logout",
-    accountSettings: "Account Settings",
-    profileSettings: "Manage your profile and account settings",
-    accountStatus: "Account Status",
-    currentPlan: "Your current subscription plan",
-    freePlan: "Free Plan",
-    emailNotifications: "Email Notifications",
-    receiveEmails: "Receive notifications via email",
-    syncData: "Data Synchronization",
-    autoSync: "Automatically synchronize data between devices",
-    interfaceAppearance: "Appearance",
-    customizeAppearance: "Customize the look of the application",
-    theme: "Theme",
-    layout: "Layout",
-    light: "Light",
-    dark: "Dark",
-    system: "System",
-    compactMode: "Compact Mode",
-    reducePadding: "Reduce spacing and size of interface elements",
-    sidebar: "Sidebar",
-    showSidebar: "Show sidebar by default",
-    animations: "Animations",
-    enableAnimations: "Enable interface animations",
-    notificationSettings: "Notifications",
-    customizeNotifications: "Configure notification parameters",
-    pushNotifications: "Push Notifications",
-    receivePush: "Receive notifications in browser",
-    mealReminders: "Meal Reminders",
-    getMealReminders: "Receive meal reminders",
-    achievements: "Achievements",
-    achievementNotifications: "Notifications about earned achievements",
-    weeklyReports: "Weekly Reports",
-    getWeeklyReports: "Receive weekly progress reports",
-    subscriptionBilling: "Subscription & Billing",
-    manageSubscription: "Manage subscription and payment information",
-    currentPlanTitle: "Current Plan",
-    active: "Active",
-    basicTracking: "Basic calorie tracking",
-    limitedHistory: "Limited meal history",
-    basicReports: "Basic reports",
-    availablePlans: "Available Plans",
-    premium: "Premium",
-    month: "month",
-    advancedAnalytics: "Advanced analytics",
-    aiRecommendations: "Personal AI recommendations",
-    unlimitedHistory: "Unlimited history",
-    noAds: "No advertisements",
-    subscribe: "Subscribe",
-    yearlyPlan: "Yearly Plan",
-    year: "year",
-    savings: "Save 40%",
-    allPremiumFeatures: "All Premium features",
-    prioritySupport: "Priority support",
-    dataExport: "Data export",
-    languageRegion: "Language & Region",
-    customizeLanguage: "Customize language and regional settings",
-    appLanguage: "Application Language",
-    region: "Region",
-    timezone: "Timezone",
-    saveSettings: "Save Settings",
-    helpSupport: "Help & Support",
-    getHelp: "Get help using the application",
-    supportCenter: "Support Center",
-    faqInstructions: "Answers to frequently asked questions and instructions",
-    contactUs: "Contact Us",
-    contactSupport: "Write to support if you have problems",
-    tutorials: "Tutorials",
-    tutorialDescription: "Video tutorials and instructions on using the application",
-    reportProblem: "Report a Problem",
-    reportBugs: "Report bugs or issues to us",
-    appVersion: "App Version: 1.0.0"
-  },
-};
-
 const Settings = () => {
   const { theme, setTheme } = useTheme();
-  const [currentLanguage, setCurrentLanguage] = useState("ru");
-  const [t, setT] = useState(translations.ru);
-
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") || "ru";
-    setCurrentLanguage(savedLanguage);
-    setT(translations[savedLanguage] || translations.ru);
-    
-    document.documentElement.lang = savedLanguage;
-  }, []);
+  const { language, setLanguage, t } = useLanguage();
+  const [region, setRegion] = useState(() => {
+    return localStorage.getItem("region") || "ru";
+  });
+  const [timezone, setTimezone] = useState(() => {
+    return localStorage.getItem("timezone") || "gmt+3";
+  });
 
   const [notifications, setNotifications] = useState({
     email: true,
@@ -329,16 +160,6 @@ const Settings = () => {
     compact: false,
     sidebar: true,
     animations: true
-  });
-
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem("language") || "ru";
-  });
-  const [region, setRegion] = useState(() => {
-    return localStorage.getItem("region") || "ru";
-  });
-  const [timezone, setTimezone] = useState(() => {
-    return localStorage.getItem("timezone") || "gmt+3";
   });
 
   const [currency, setCurrency] = useState({
@@ -419,12 +240,9 @@ const Settings = () => {
   };
 
   const handleSaveLanguage = () => {
-    localStorage.setItem("language", language);
+    setLanguage(language);
     localStorage.setItem("region", region);
     localStorage.setItem("timezone", timezone);
-    
-    setCurrentLanguage(language);
-    setT(translations[language as keyof typeof translations] || translations.en);
     
     toast.success(t.saveSettings, {
       description: t.customizeLanguage
@@ -437,7 +255,7 @@ const Settings = () => {
 
   const handleSectionClick = (section: string) => {
     toast.info(`Переход к разделу "${section}"`, {
-      description: `Выбра�� раздел "${section}" настроек`
+      description: `Выбран раздел "${section}" настроек`
     });
   };
 

@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -51,6 +52,8 @@ function SidebarNavItem({ icon, label, to, isActive }: SidebarNavItemProps) {
 }
 
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
+  const { t } = useLanguage();
+  
   return (
     <>
       {/* Overlay для мобильных устройств */}
@@ -90,42 +93,42 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <SidebarNavItem
               to="/"
               icon={<Home className="h-4 w-4" />}
-              label="Dashboard"
+              label={t.dashboard}
             />
             <SidebarNavItem
               to="/nutrition"
               icon={<Apple className="h-4 w-4" />}
-              label="Nutrition"
+              label={t.nutrition}
             />
             <SidebarNavItem
               to="/progress"
               icon={<Activity className="h-4 w-4" />}
-              label="Progress"
+              label={t.progress}
             />
             <SidebarNavItem
               to="/statistics"
               icon={<BarChart2 className="h-4 w-4" />}
-              label="Statistics"
+              label={t.statistics}
             />
             <SidebarNavItem
               to="/planner"
               icon={<Calendar className="h-4 w-4" />}
-              label="Meal Planner"
+              label={t.mealPlanner}
             />
             <SidebarNavItem
               to="/recommendations"
               icon={<Lightbulb className="h-4 w-4" />}
-              label="Recommendations"
+              label={t.recommendations}
             />
             <SidebarNavItem
               to="/achievements"
               icon={<Trophy className="h-4 w-4" />}
-              label="Achievements"
+              label={t.achievements}
             />
             <SidebarNavItem
               to="/health"
               icon={<Heart className="h-4 w-4" />}
-              label="Health"
+              label={t.health}
             />
           </nav>
           <Separator className="my-1.5" />
@@ -133,12 +136,12 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <SidebarNavItem
               to="/profile"
               icon={<User2 className="h-4 w-4" />}
-              label="My Profile"
+              label={t.myProfile}
             />
             <SidebarNavItem
               to="/settings"
               icon={<Settings className="h-4 w-4" />}
-              label="Settings"
+              label={t.settings}
             />
           </nav>
         </ScrollArea>
