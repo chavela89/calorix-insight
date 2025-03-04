@@ -181,12 +181,12 @@ const Settings = () => {
   }, [region]);
 
   // Функция для пересчета стоимости
-  const calculatePrice = (priceInRub) => {
+  const calculatePrice = (priceInRub: number) => {
     const rate = exchangeRates[currency.code] || 1;
     const convertedPrice = (priceInRub * rate).toFixed(2);
     // Форматирование цены в зависимости от валюты
     if (currency.code === "JPY" || currency.code === "KRW") {
-      return Math.round(convertedPrice); // Без копеек для иены и воны
+      return Math.round(parseFloat(convertedPrice)); // Без копеек для иены и воны
     }
     return convertedPrice;
   };
