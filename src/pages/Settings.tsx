@@ -399,7 +399,9 @@ const Settings = () => {
           ? t.light 
           : newTheme === "dark" 
             ? t.dark 
-            : t.system
+            : newTheme === "system"
+              ? t.system
+              : newTheme
       }`
     });
   };

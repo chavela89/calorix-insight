@@ -23,7 +23,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Update document class
     const root = window.document.documentElement;
     root.classList.remove("light", "dark", "creamy", "blue-gray", "green", "coral", "purple", "blue", "yellow");
-    root.classList.add(theme);
+    
+    if (theme === "system") {
+      // Handle system theme preference
+      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      root.classList.add(isDark ? "dark" : "light");
+    } else {
+      root.classList.add(theme);
+    }
     
     console.log("Theme changed to:", theme);
   }, [theme]);
