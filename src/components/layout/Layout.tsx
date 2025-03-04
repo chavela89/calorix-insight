@@ -22,7 +22,7 @@ export default function Layout() {
       <Header goBack={goBack} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto bg-background">
+        <main className="flex-1 overflow-y-auto bg-background w-full ml-0 md:ml-60">
           <Outlet />
         </main>
       </div>

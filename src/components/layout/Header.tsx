@@ -138,7 +138,7 @@ const Header = ({ goBack }) => {
             {themes.map(themeOption => (
               <DropdownMenuItem 
                 key={themeOption.id} 
-                onClick={() => handleThemeChange(themeOption.id as ThemeType)}
+                onClick={() => handleThemeChange(themeOption.id)}
                 className={theme === themeOption.id ? "bg-muted" : ""}
               >
                 {themeOption.name} {theme === themeOption.id && "✓"}

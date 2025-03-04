@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Settings as SettingsIcon, Bell, CreditCard, Smartphone, Monitor, Globe, LogOut, HelpCircle, Languages, ChevronRight, Apple } from "lucide-react";
 import { toast } from "sonner";
 import { useTheme } from "@/context/ThemeContext";
+import { ThemeType } from "@/types";
 
-// Language and region data
 const languagesData = [
   { code: "ru", name: "Русский", flag: "🇷🇺" },
   { code: "en", name: "English", flag: "🇺🇸" },
@@ -136,10 +136,186 @@ const exchangeRates = {
   RON: 0.05,
 };
 
+const translations = {
+  ru: {
+    settings: "Настройки",
+    customize: "Настройте приложение по своему усмотрению",
+    sections: "Разделы настроек",
+    account: "Аккаунт",
+    appearance: "Внешний вид",
+    notifications: "Уведомления",
+    subscription: "Подписка",
+    language: "Язык",
+    help: "Помощь",
+    logout: "Выйти",
+    accountSettings: "Настройки аккаунта",
+    profileSettings: "Управление настройками профиля и аккаунта",
+    accountStatus: "Статус аккаунта",
+    currentPlan: "Ваш текущий план подписки",
+    freePlan: "Бесплатный план",
+    emailNotifications: "Email-уведомления",
+    receiveEmails: "Получать уведомления на почту",
+    syncData: "Синхронизация данных",
+    autoSync: "Автоматически синхронизировать данные между устройствами",
+    interfaceAppearance: "Внешний вид",
+    customizeAppearance: "Настройте внешний вид приложения",
+    theme: "Тема",
+    layout: "Интерфейс",
+    light: "Светлая",
+    dark: "Темная",
+    system: "Системная",
+    compactMode: "Компактный режим",
+    reducePadding: "Уменьшить отступы и размер элементов интерфейса",
+    sidebar: "Боковая панель",
+    showSidebar: "Показывать боковую панель по умолчанию",
+    animations: "Анимации",
+    enableAnimations: "Включить анимации интерфейса",
+    notificationSettings: "Уведомления",
+    customizeNotifications: "Настройте параметры уведомлений",
+    pushNotifications: "Push-уведомления",
+    receivePush: "Получать уведомления в браузере",
+    mealReminders: "Напоминания о питании",
+    getMealReminders: "Получать напоминания о приемах пищи",
+    achievements: "Достижения",
+    achievementNotifications: "Уведомления о полученных достижениях",
+    weeklyReports: "Еженедельные отчеты",
+    getWeeklyReports: "Получать еженедельные отчеты о прогрессе",
+    subscriptionBilling: "Подписка и оплата",
+    manageSubscription: "Управление подпиской и платежной информацией",
+    currentPlanTitle: "Текущий план",
+    active: "Активен",
+    basicTracking: "Базовое отслеживание калорий",
+    limitedHistory: "Ограниченная история приемов пищи",
+    basicReports: "Основные отчеты",
+    availablePlans: "Доступные планы",
+    premium: "Премиум",
+    month: "месяц",
+    advancedAnalytics: "Расширенная аналитика",
+    aiRecommendations: "Персональные рекомендации AI",
+    unlimitedHistory: "Неограниченная история",
+    noAds: "Без рекламы",
+    subscribe: "Оформить подписку",
+    yearlyPlan: "Годовой план",
+    year: "год",
+    savings: "Экономия 40%",
+    allPremiumFeatures: "Все функции Премиум",
+    prioritySupport: "Приоритетная поддержка",
+    dataExport: "Экспорт данных",
+    languageRegion: "Язык и регион",
+    customizeLanguage: "Настройте язык и региональные параметры",
+    appLanguage: "Язык приложения",
+    region: "Регион",
+    timezone: "Часовой пояс",
+    saveSettings: "Сохранить настройки",
+    helpSupport: "Помощь и поддержка",
+    getHelp: "Получите помощь по использованию приложения",
+    supportCenter: "Центр поддержки",
+    faqInstructions: "Ответы на часто задаваемые вопросы и инструкции",
+    contactUs: "Свяжитесь с нами",
+    contactSupport: "Напишите в службу поддержки, если у вас возникли проблемы",
+    tutorials: "Обучающие материалы",
+    tutorialDescription: "Видеоуроки и инструкции по использованию приложения",
+    reportProblem: "Сообщить о проблеме",
+    reportBugs: "Сообщите нам о найденных ошибках или проблемах",
+    appVersion: "Версия приложения: 1.0.0"
+  },
+  en: {
+    settings: "Settings",
+    customize: "Customize the application to your liking",
+    sections: "Setting Sections",
+    account: "Account",
+    appearance: "Appearance",
+    notifications: "Notifications",
+    subscription: "Subscription",
+    language: "Language",
+    help: "Help",
+    logout: "Logout",
+    accountSettings: "Account Settings",
+    profileSettings: "Manage your profile and account settings",
+    accountStatus: "Account Status",
+    currentPlan: "Your current subscription plan",
+    freePlan: "Free Plan",
+    emailNotifications: "Email Notifications",
+    receiveEmails: "Receive notifications via email",
+    syncData: "Data Synchronization",
+    autoSync: "Automatically synchronize data between devices",
+    interfaceAppearance: "Appearance",
+    customizeAppearance: "Customize the look of the application",
+    theme: "Theme",
+    layout: "Layout",
+    light: "Light",
+    dark: "Dark",
+    system: "System",
+    compactMode: "Compact Mode",
+    reducePadding: "Reduce spacing and size of interface elements",
+    sidebar: "Sidebar",
+    showSidebar: "Show sidebar by default",
+    animations: "Animations",
+    enableAnimations: "Enable interface animations",
+    notificationSettings: "Notifications",
+    customizeNotifications: "Configure notification parameters",
+    pushNotifications: "Push Notifications",
+    receivePush: "Receive notifications in browser",
+    mealReminders: "Meal Reminders",
+    getMealReminders: "Receive meal reminders",
+    achievements: "Achievements",
+    achievementNotifications: "Notifications about earned achievements",
+    weeklyReports: "Weekly Reports",
+    getWeeklyReports: "Receive weekly progress reports",
+    subscriptionBilling: "Subscription & Billing",
+    manageSubscription: "Manage subscription and payment information",
+    currentPlanTitle: "Current Plan",
+    active: "Active",
+    basicTracking: "Basic calorie tracking",
+    limitedHistory: "Limited meal history",
+    basicReports: "Basic reports",
+    availablePlans: "Available Plans",
+    premium: "Premium",
+    month: "month",
+    advancedAnalytics: "Advanced analytics",
+    aiRecommendations: "Personal AI recommendations",
+    unlimitedHistory: "Unlimited history",
+    noAds: "No advertisements",
+    subscribe: "Subscribe",
+    yearlyPlan: "Yearly Plan",
+    year: "year",
+    savings: "Save 40%",
+    allPremiumFeatures: "All Premium features",
+    prioritySupport: "Priority support",
+    dataExport: "Data export",
+    languageRegion: "Language & Region",
+    customizeLanguage: "Customize language and regional settings",
+    appLanguage: "Application Language",
+    region: "Region",
+    timezone: "Timezone",
+    saveSettings: "Save Settings",
+    helpSupport: "Help & Support",
+    getHelp: "Get help using the application",
+    supportCenter: "Support Center",
+    faqInstructions: "Answers to frequently asked questions and instructions",
+    contactUs: "Contact Us",
+    contactSupport: "Write to support if you have problems",
+    tutorials: "Tutorials",
+    tutorialDescription: "Video tutorials and instructions on using the application",
+    reportProblem: "Report a Problem",
+    reportBugs: "Report bugs or issues to us",
+    appVersion: "App Version: 1.0.0"
+  },
+};
+
 const Settings = () => {
   const { theme, setTheme } = useTheme();
+  const [currentLanguage, setCurrentLanguage] = useState("ru");
+  const [t, setT] = useState(translations.ru);
 
-  // Состояние для переключателей настроек
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") || "ru";
+    setCurrentLanguage(savedLanguage);
+    setT(translations[savedLanguage] || translations.ru);
+    
+    document.documentElement.lang = savedLanguage;
+  }, []);
+
   const [notifications, setNotifications] = useState({
     email: true,
     sync: true,
@@ -149,25 +325,27 @@ const Settings = () => {
     weeklyReports: true
   });
 
-  // Состояние для темы
   const [interfaceSettings, setInterfaceSettings] = useState({
     compact: false,
     sidebar: true,
     animations: true
   });
 
-  // Состояние для региональных настроек
-  const [language, setLanguage] = useState("ru");
-  const [region, setRegion] = useState("ru");
-  const [timezone, setTimezone] = useState("gmt+3");
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem("language") || "ru";
+  });
+  const [region, setRegion] = useState(() => {
+    return localStorage.getItem("region") || "ru";
+  });
+  const [timezone, setTimezone] = useState(() => {
+    return localStorage.getItem("timezone") || "gmt+3";
+  });
 
-  // Состояние для текущей валюты
   const [currency, setCurrency] = useState({
     code: "RUB",
     symbol: "₽"
   });
 
-  // Обновление валюты при смене региона
   useEffect(() => {
     const selectedRegion = regionsData.find(r => r.code === region);
     if (selectedRegion) {
@@ -178,18 +356,15 @@ const Settings = () => {
     }
   }, [region]);
 
-  // Функция для пересчета стоимости
   const calculatePrice = (priceInRub: number) => {
-    const rate = exchangeRates[currency.code] || 1;
+    const rate = exchangeRates[currency.code as keyof typeof exchangeRates] || 1;
     const convertedPrice = (priceInRub * rate).toFixed(2);
-    // Форматирование цены в зависимости от валюты
     if (currency.code === "JPY" || currency.code === "KRW") {
-      return Math.round(parseFloat(convertedPrice)); // Без копеек для иены и воны
+      return Math.round(parseFloat(convertedPrice));
     }
     return convertedPrice;
   };
 
-  // Обработчики событий
   const handleToggle = (setting: keyof typeof notifications) => {
     setNotifications(prev => {
       const newValue = !prev[setting];
@@ -216,18 +391,17 @@ const Settings = () => {
     });
   };
 
-  const handleThemeChange = (newTheme: string) => {
+  const handleThemeChange = (newTheme: ThemeType) => {
     setTheme(newTheme);
-    toast.success("Тема изменена", {
-      description: `Установлена ${
+    toast.success(t.theme + " " + t.active, {
+      description: `${
         newTheme === "light" 
-          ? "светлая тема" 
+          ? t.light 
           : newTheme === "dark" 
-            ? "темная тема" 
-            : "системная тема"
+            ? t.dark 
+            : t.system
       }`
     });
-    // Здесь можно добавить логику для реального изменения темы
   };
 
   const handleLogout = () => {
@@ -243,9 +417,20 @@ const Settings = () => {
   };
 
   const handleSaveLanguage = () => {
-    toast.success("Настройки сохранены", {
-      description: "Изменения языка и региона применены"
+    localStorage.setItem("language", language);
+    localStorage.setItem("region", region);
+    localStorage.setItem("timezone", timezone);
+    
+    setCurrentLanguage(language);
+    setT(translations[language as keyof typeof translations] || translations.en);
+    
+    toast.success(t.saveSettings, {
+      description: t.customizeLanguage
     });
+    
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   const handleSectionClick = (section: string) => {
@@ -257,57 +442,57 @@ const Settings = () => {
   return (
     <div className="container mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Настройки</h1>
-        <p className="text-muted-foreground">Настройте приложение по своему усмотрению</p>
+        <h1 className="text-3xl font-bold mb-2">{t.settings}</h1>
+        <p className="text-muted-foreground">{t.customize}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-1">
           <Card className="mb-6">
             <div className="p-4 border-b">
-              <h3 className="font-medium">Разделы настроек</h3>
+              <h3 className="font-medium">{t.sections}</h3>
             </div>
             <CardContent className="p-0">
               <nav className="flex flex-col">
-                <a href="#account" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick("Аккаунт")}>
+                <a href="#account" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick(t.account)}>
                   <div className="flex items-center gap-3">
                     <SettingsIcon className="h-5 w-5 text-primary" />
-                    <span>Аккаунт</span>
+                    <span>{t.account}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </a>
-                <a href="#appearance" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick("Внешний вид")}>
+                <a href="#appearance" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick(t.appearance)}>
                   <div className="flex items-center gap-3">
                     <Monitor className="h-5 w-5 text-primary" />
-                    <span>Внешний вид</span>
+                    <span>{t.appearance}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </a>
-                <a href="#notifications" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick("Уведомления")}>
+                <a href="#notifications" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick(t.notifications)}>
                   <div className="flex items-center gap-3">
                     <Bell className="h-5 w-5 text-primary" />
-                    <span>Уведомления</span>
+                    <span>{t.notifications}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </a>
-                <a href="#billing" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick("Подписка")}>
+                <a href="#billing" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick(t.subscription)}>
                   <div className="flex items-center gap-3">
                     <CreditCard className="h-5 w-5 text-primary" />
-                    <span>Подписка</span>
+                    <span>{t.subscription}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </a>
-                <a href="#language" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick("Язык")}>
+                <a href="#language" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick(t.language)}>
                   <div className="flex items-center gap-3">
                     <Globe className="h-5 w-5 text-primary" />
-                    <span>Язык</span>
+                    <span>{t.language}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </a>
-                <a href="#help" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick("Помощь")}>
+                <a href="#help" className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors rounded-md" onClick={() => handleSectionClick(t.help)}>
                   <div className="flex items-center gap-3">
                     <HelpCircle className="h-5 w-5 text-primary" />
-                    <span>Помощь</span>
+                    <span>{t.help}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </a>
@@ -316,7 +501,7 @@ const Settings = () => {
             <div className="p-4 border-t">
               <Button variant="ghost" className="w-full text-destructive justify-start" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
-                Выйти
+                {t.logout}
               </Button>
             </div>
           </Card>
@@ -325,32 +510,32 @@ const Settings = () => {
         <div className="lg:col-span-3">
           <Card className="mb-6" id="account">
             <CardHeader>
-              <CardTitle>Настройки аккаунта</CardTitle>
-              <CardDescription>Управление настройками профиля и аккаунта</CardDescription>
+              <CardTitle>{t.accountSettings}</CardTitle>
+              <CardDescription>{t.profileSettings}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Статус аккаунта</h4>
-                  <p className="text-xs text-muted-foreground">Ваш текущий план подписки</p>
+                  <h4 className="text-sm font-medium">{t.accountStatus}</h4>
+                  <p className="text-xs text-muted-foreground">{t.currentPlan}</p>
                 </div>
-                <Badge variant="outline">Бесплатный план</Badge>
+                <Badge variant="outline">{t.freePlan}</Badge>
               </div>
 
               <Separator />
 
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Email-уведомления</h4>
-                  <p className="text-xs text-muted-foreground">Получать уведомления на почту</p>
+                  <h4 className="text-sm font-medium">{t.emailNotifications}</h4>
+                  <p className="text-xs text-muted-foreground">{t.receiveEmails}</p>
                 </div>
                 <Switch checked={notifications.email} onCheckedChange={() => handleToggle('email')} />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Синхронизация данных</h4>
-                  <p className="text-xs text-muted-foreground">Автоматически синхронизировать данные между устройствами</p>
+                  <h4 className="text-sm font-medium">{t.syncData}</h4>
+                  <p className="text-xs text-muted-foreground">{t.autoSync}</p>
                 </div>
                 <Switch checked={notifications.sync} onCheckedChange={() => handleToggle('sync')} />
               </div>
@@ -359,21 +544,21 @@ const Settings = () => {
 
           <Card className="mb-6" id="appearance">
             <CardHeader>
-              <CardTitle>Внешний вид</CardTitle>
-              <CardDescription>Настройте внешний вид приложения</CardDescription>
+              <CardTitle>{t.appearance}</CardTitle>
+              <CardDescription>{t.customizeAppearance}</CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="theme">
                 <TabsList className="mb-4">
-                  <TabsTrigger value="theme">Тема</TabsTrigger>
-                  <TabsTrigger value="layout">Интерфейс</TabsTrigger>
+                  <TabsTrigger value="theme">{t.theme}</TabsTrigger>
+                  <TabsTrigger value="layout">{t.layout}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="theme" className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div className="flex flex-col items-center gap-2">
                       <div className="w-full h-24 rounded-md bg-white border border-border flex items-center justify-center">
-                        <span className="text-sm font-medium text-black">Светлая</span>
+                        <span className="text-sm font-medium text-black">{t.light}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <input 
@@ -383,13 +568,13 @@ const Settings = () => {
                           checked={theme === "light"}
                           onChange={() => handleThemeChange("light")}
                         />
-                        <label htmlFor="light" className="text-sm">Светлая тема</label>
+                        <label htmlFor="light" className="text-sm">{t.light}</label>
                       </div>
                     </div>
 
                     <div className="flex flex-col items-center gap-2">
                       <div className="w-full h-24 rounded-md bg-neutral-900 border border-border flex items-center justify-center">
-                        <span className="text-sm font-medium text-white">Темная</span>
+                        <span className="text-sm font-medium text-white">{t.dark}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <input 
@@ -399,13 +584,13 @@ const Settings = () => {
                           checked={theme === "dark"}
                           onChange={() => handleThemeChange("dark")}
                         />
-                        <label htmlFor="dark" className="text-sm">Темная тема</label>
+                        <label htmlFor="dark" className="text-sm">{t.dark}</label>
                       </div>
                     </div>
 
                     <div className="flex flex-col items-center gap-2">
                       <div className="w-full h-24 rounded-md bg-gradient-to-b from-white to-neutral-900 border border-border flex items-center justify-center">
-                        <span className="text-sm font-medium text-black">Авто</span>
+                        <span className="text-sm font-medium text-black">{t.system}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <input 
@@ -415,7 +600,7 @@ const Settings = () => {
                           checked={theme === "system"}
                           onChange={() => handleThemeChange("system")}
                         />
-                        <label htmlFor="system" className="text-sm">Системная</label>
+                        <label htmlFor="system" className="text-sm">{t.system}</label>
                       </div>
                     </div>
                   </div>
@@ -424,8 +609,8 @@ const Settings = () => {
                 <TabsContent value="layout" className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-medium">Компактный режим</h4>
-                      <p className="text-xs text-muted-foreground">Уменьшить отступы и размер элементов интерфейса</p>
+                      <h4 className="text-sm font-medium">{t.compactMode}</h4>
+                      <p className="text-xs text-muted-foreground">{t.reducePadding}</p>
                     </div>
                     <Switch 
                       checked={interfaceSettings.compact} 
@@ -435,8 +620,8 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-medium">Боковая панель</h4>
-                      <p className="text-xs text-muted-foreground">Показывать боковую панель по умолчанию</p>
+                      <h4 className="text-sm font-medium">{t.sidebar}</h4>
+                      <p className="text-xs text-muted-foreground">{t.showSidebar}</p>
                     </div>
                     <Switch 
                       checked={interfaceSettings.sidebar} 
@@ -446,8 +631,8 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-medium">Анимации</h4>
-                      <p className="text-xs text-muted-foreground">Включить анимации интерфейса</p>
+                      <h4 className="text-sm font-medium">{t.animations}</h4>
+                      <p className="text-xs text-muted-foreground">{t.enableAnimations}</p>
                     </div>
                     <Switch 
                       checked={interfaceSettings.animations} 
@@ -461,38 +646,38 @@ const Settings = () => {
 
           <Card className="mb-6" id="notifications">
             <CardHeader>
-              <CardTitle>Уведомления</CardTitle>
-              <CardDescription>Настройте параметры уведомлений</CardDescription>
+              <CardTitle>{t.notifications}</CardTitle>
+              <CardDescription>{t.customizeNotifications}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Push-уведомления</h4>
-                  <p className="text-xs text-muted-foreground">Получать уведомления в браузере</p>
+                  <h4 className="text-sm font-medium">{t.pushNotifications}</h4>
+                  <p className="text-xs text-muted-foreground">{t.receivePush}</p>
                 </div>
                 <Switch checked={notifications.push} onCheckedChange={() => handleToggle('push')} />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Напоминания о питании</h4>
-                  <p className="text-xs text-muted-foreground">Получать напоминания о приемах пищи</p>
+                  <h4 className="text-sm font-medium">{t.mealReminders}</h4>
+                  <p className="text-xs text-muted-foreground">{t.getMealReminders}</p>
                 </div>
                 <Switch checked={notifications.mealReminders} onCheckedChange={() => handleToggle('mealReminders')} />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Достижения</h4>
-                  <p className="text-xs text-muted-foreground">Уведомления о полученных достижениях</p>
+                  <h4 className="text-sm font-medium">{t.achievements}</h4>
+                  <p className="text-xs text-muted-foreground">{t.achievementNotifications}</p>
                 </div>
                 <Switch checked={notifications.achievements} onCheckedChange={() => handleToggle('achievements')} />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-medium">Еженедельные отчеты</h4>
-                  <p className="text-xs text-muted-foreground">Получать еженедельные отчеты о прогрессе</p>
+                  <h4 className="text-sm font-medium">{t.weeklyReports}</h4>
+                  <p className="text-xs text-muted-foreground">{t.getWeeklyReports}</p>
                 </div>
                 <Switch checked={notifications.weeklyReports} onCheckedChange={() => handleToggle('weeklyReports')} />
               </div>
@@ -501,79 +686,79 @@ const Settings = () => {
 
           <Card className="mb-6" id="billing">
             <CardHeader>
-              <CardTitle>Подписка и оплата</CardTitle>
-              <CardDescription>Управление подпиской и платежной информацией</CardDescription>
+              <CardTitle>{t.subscriptionBilling}</CardTitle>
+              <CardDescription>{t.manageSubscription}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="mb-6 p-4 border rounded-md">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h4 className="font-medium">Текущий план</h4>
-                    <p className="text-sm text-muted-foreground">Бесплатный план</p>
+                    <h4 className="font-medium">{t.currentPlanTitle}</h4>
+                    <p className="text-sm text-muted-foreground">{t.currentPlan}</p>
                   </div>
-                  <Badge variant="outline">Активен</Badge>
+                  <Badge variant="outline">{t.active}</Badge>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <span className="text-primary">✓</span>
-                    <span className="text-sm">Базовое отслеживание калорий</span>
+                    <span className="text-sm">{t.basicTracking}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-primary">✓</span>
-                    <span className="text-sm">Ограниченная история приемов пищи</span>
+                    <span className="text-sm">{t.limitedHistory}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-primary">✓</span>
-                    <span className="text-sm">Основные отчеты</span>
+                    <span className="text-sm">{t.basicReports}</span>
                   </div>
                 </div>
               </div>
 
-              <h4 className="font-medium mb-4">Доступные планы</h4>
+              <h4 className="font-medium mb-4">{t.availablePlans}</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="p-4 border rounded-md hover:border-primary cursor-pointer transition-colors">
-                  <h5 className="font-medium mb-2">Премиум</h5>
-                  <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(299)}<span className="text-sm font-normal text-muted-foreground">/месяц</span></p>
+                  <h5 className="font-medium mb-2">{t.premium}</h5>
+                  <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(299)}<span className="text-sm font-normal text-muted-foreground">{t.month}</span></p>
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Расширенная аналитика</span>
+                      <span className="text-sm">{t.advancedAnalytics}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Персональные рекомендации AI</span>
+                      <span className="text-sm">{t.aiRecommendations}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Неограниченная история</span>
+                      <span className="text-sm">{t.unlimitedHistory}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Без рекламы</span>
+                      <span className="text-sm">{t.noAds}</span>
                     </div>
                   </div>
-                  <Button className="w-full" onClick={() => handleSubscribe("Премиум")}>Оформить подписку</Button>
+                  <Button className="w-full" onClick={() => handleSubscribe("Премиум")}>{t.subscribe}</Button>
                 </div>
 
                 <div className="p-4 border rounded-md hover:border-primary cursor-pointer transition-colors">
-                  <h5 className="font-medium mb-2">Годовой план</h5>
-                  <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(2499)}<span className="text-sm font-normal text-muted-foreground">/год</span></p>
-                  <Badge className="mb-2">Экономия 40%</Badge>
+                  <h5 className="font-medium mb-2">{t.yearlyPlan}</h5>
+                  <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(2499)}<span className="text-sm font-normal text-muted-foreground">{t.year}</span></p>
+                  <Badge className="mb-2">{t.savings}</Badge>
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Все функции Премиум</span>
+                      <span className="text-sm">{t.allPremiumFeatures}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Приоритетная поддержка</span>
+                      <span className="text-sm">{t.prioritySupport}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
-                      <span className="text-sm">Экспорт данных</span>
+                      <span className="text-sm">{t.dataExport}</span>
                     </div>
                   </div>
-                  <Button className="w-full" onClick={() => handleSubscribe("Годовой план")}>Оформить подписку</Button>
+                  <Button className="w-full" onClick={() => handleSubscribe("Годовой план")}>{t.subscribe}</Button>
                 </div>
               </div>
             </CardContent>
@@ -581,12 +766,12 @@ const Settings = () => {
 
           <Card className="mb-6" id="language">
             <CardHeader>
-              <CardTitle>Язык и регион</CardTitle>
-              <CardDescription>Настройте язык и региональные параметры</CardDescription>
+              <CardTitle>{t.languageRegion}</CardTitle>
+              <CardDescription>{t.customizeLanguage}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="language" className="text-sm font-medium">Язык приложения</label>
+                <label htmlFor="language" className="text-sm font-medium">{t.appLanguage}</label>
                 <select 
                   id="language" 
                   className="w-full px-3 py-2 rounded-md border border-input bg-background"
@@ -602,7 +787,7 @@ const Settings = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="region" className="text-sm font-medium">Регион</label>
+                <label htmlFor="region" className="text-sm font-medium">{t.region}</label>
                 <select 
                   id="region" 
                   className="w-full px-3 py-2 rounded-md border border-input bg-background"
@@ -618,7 +803,7 @@ const Settings = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="timezone" className="text-sm font-medium">Часовой пояс</label>
+                <label htmlFor="timezone" className="text-sm font-medium">{t.timezone}</label>
                 <select 
                   id="timezone" 
                   className="w-full px-3 py-2 rounded-md border border-input bg-background"
@@ -634,39 +819,39 @@ const Settings = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleSaveLanguage}>Сохранить настройки</Button>
+              <Button onClick={handleSaveLanguage}>{t.saveSettings}</Button>
             </CardFooter>
           </Card>
 
           <Card id="help">
             <CardHeader>
-              <CardTitle>Помощь и поддержка</CardTitle>
-              <CardDescription>Получите помощь по использованию приложения</CardDescription>
+              <CardTitle>{t.helpSupport}</CardTitle>
+              <CardDescription>{t.getHelp}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick("Центр поддержки")}>
-                <h4 className="font-medium mb-1">Центр поддержки</h4>
-                <p className="text-sm text-muted-foreground">Ответы на часто задаваемые вопросы и инструкции</p>
+              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick(t.supportCenter)}>
+                <h4 className="font-medium mb-1">{t.supportCenter}</h4>
+                <p className="text-sm text-muted-foreground">{t.faqInstructions}</p>
               </div>
 
-              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick("Связь с поддержкой")}>
-                <h4 className="font-medium mb-1">Свяжитесь с нами</h4>
-                <p className="text-sm text-muted-foreground">Напишите в службу поддержки, если у вас возникли проблемы</p>
+              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick(t.contactUs)}>
+                <h4 className="font-medium mb-1">{t.contactUs}</h4>
+                <p className="text-sm text-muted-foreground">{t.contactSupport}</p>
               </div>
 
-              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick("Обучение")}>
-                <h4 className="font-medium mb-1">Обучающие материалы</h4>
-                <p className="text-sm text-muted-foreground">Видеоуроки и инструкции по использованию приложения</p>
+              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick(t.tutorials)}>
+                <h4 className="font-medium mb-1">{t.tutorials}</h4>
+                <p className="text-sm text-muted-foreground">{t.tutorialDescription}</p>
               </div>
 
-              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick("Сообщить о проблеме")}>
-                <h4 className="font-medium mb-1">Сообщить о проблеме</h4>
-                <p className="text-sm text-muted-foreground">Сообщите нам о найденных ошибках или проблемах</p>
+              <div className="p-4 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => handleSectionClick(t.reportProblem)}>
+                <h4 className="font-medium mb-1">{t.reportProblem}</h4>
+                <p className="text-sm text-muted-foreground">{t.reportBugs}</p>
               </div>
             </CardContent>
             <CardFooter>
               <div className="text-sm text-muted-foreground">
-                <p>Версия приложения: 1.0.0</p>
+                <p>{t.appVersion}</p>
               </div>
             </CardFooter>
           </Card>

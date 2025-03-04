@@ -1,5 +1,5 @@
 // Theme types
-export type ThemeType = "light" | "dark" | "creamy" | "blue-gray" | "green" | "coral" | "purple" | "blue" | "yellow";
+export type ThemeType = "light" | "dark" | "creamy" | "blue-gray" | "green" | "coral" | "purple" | "blue" | "yellow" | "system";
 
 // User profile types
 export interface UserProfile {
