@@ -1,8 +1,6 @@
 
-export type SupportedLanguage = 'ru' | 'en' | 'es' | 'fr' | 'de';
-
-export type LanguageContextType = {
-  language: SupportedLanguage;
-  setLanguage: (language: SupportedLanguage) => void;
-  t: Record<string, string>;
-};
+export interface LanguageContextType {
+  language: string;
+  t: any;
+  setLanguage: React.Dispatch<React.SetStateAction<string>>;
+}
