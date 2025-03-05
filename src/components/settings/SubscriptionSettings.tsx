@@ -28,7 +28,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
           <div className="flex justify-between items-start mb-4">
             <div>
               <h4 className="font-medium">{t.currentPlanTitle}</h4>
-              <p className="text-sm text-muted-foreground">{t.currentPlan}</p>
+              <p className="text-sm text-muted-foreground">{t.freePlan}</p>
             </div>
             <Badge variant="outline">{t.active}</Badge>
           </div>
@@ -51,8 +51,8 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
         <h4 className="font-medium mb-4">{t.availablePlans}</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="p-4 border rounded-md hover:border-primary cursor-pointer transition-colors">
-            <h5 className="font-medium mb-2">{t.premium}</h5>
-            <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(299)}<span className="text-sm font-normal text-muted-foreground">{t.month}</span></p>
+            <h5 className="font-medium mb-2">{t.premiumPlan}</h5>
+            <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(299)}<span className="text-sm font-normal text-muted-foreground">/{t.month}</span></p>
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
@@ -60,28 +60,28 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
-                <span className="text-sm">{t.aiRecommendations}</span>
+                <span className="text-sm">{t.personalCoaching}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
-                <span className="text-sm">{t.unlimitedHistory}</span>
+                <span className="text-sm">{t.unlimitedAccess}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
                 <span className="text-sm">{t.noAds}</span>
               </div>
             </div>
-            <Button className="w-full" onClick={() => handleSubscribe("Премиум")}>{t.subscribe}</Button>
+            <Button className="w-full" onClick={() => handleSubscribe(t.premiumPlan)}>{t.subscribeTo} {t.premiumPlan}</Button>
           </div>
 
           <div className="p-4 border rounded-md hover:border-primary cursor-pointer transition-colors">
             <h5 className="font-medium mb-2">{t.yearlyPlan}</h5>
-            <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(2499)}<span className="text-sm font-normal text-muted-foreground">{t.year}</span></p>
+            <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(2499)}<span className="text-sm font-normal text-muted-foreground">/{t.year}</span></p>
             <Badge className="mb-2">{t.savings}</Badge>
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
-                <span className="text-sm">{t.allPremiumFeatures}</span>
+                <span className="text-sm">{t.premiumFeatures}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
@@ -92,7 +92,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                 <span className="text-sm">{t.dataExport}</span>
               </div>
             </div>
-            <Button className="w-full" onClick={() => handleSubscribe("Годовой план")}>{t.subscribe}</Button>
+            <Button className="w-full" onClick={() => handleSubscribe(t.yearlyPlan)}>{t.subscribeTo} {t.yearlyPlan}</Button>
           </div>
         </div>
       </CardContent>

@@ -63,14 +63,31 @@ const RecipeCalculator = () => {
     if (savedRecipes) {
       try {
         const recipes = JSON.parse(savedRecipes);
+        
         if (recipes.length > 0) {
+          const lastRecipe = recipes[recipes.length - 1];
+          loadRecipe(lastRecipe);
+        } else {
           toast.info(t.loadRecipe, {
-            description: `${recipes.length} ${t.myRecipes}`
+            description: t.language === 'ru' 
+              ? 'У вас еще нет сохраненных рецептов' 
+              : 'You don\'t have any saved recipes yet'
           });
         }
       } catch (e) {
         console.error('Error loading recipes:', e);
+        toast.error(t.loadRecipe, {
+          description: t.language === 'ru' 
+            ? 'Ошибка при загрузке рецептов' 
+            : 'Error loading recipes'
+        });
       }
+    } else {
+      toast.info(t.loadRecipe, {
+        description: t.language === 'ru' 
+          ? 'У вас еще нет сохраненных рецептов' 
+          : 'You don\'t have any saved recipes yet'
+      });
     }
   }, [t]);
   
@@ -270,6 +287,54 @@ const RecipeCalculator = () => {
     });
   };
   
+  const handleLoadRecipe = () => {
+    const savedRecipes = localStorage.getItem('recipes');
+    
+    if (savedRecipes) {
+      try {
+        const recipes = JSON.parse(savedRecipes);
+        
+        if (recipes.length > 0) {
+          const lastRecipe = recipes[recipes.length - 1];
+          loadRecipe(lastRecipe);
+        } else {
+          toast.info(t.loadRecipe, {
+            description: t.language === 'ru' 
+              ? 'У вас еще нет сохраненных рецептов' 
+              : 'You don\'t have any saved recipes yet'
+          });
+        }
+      } catch (e) {
+        console.error('Error loading recipes:', e);
+        toast.error(t.loadRecipe, {
+          description: t.language === 'ru' 
+            ? 'Ошибка при загрузке рецептов' 
+            : 'Error loading recipes'
+        });
+      }
+    } else {
+      toast.info(t.loadRecipe, {
+        description: t.language === 'ru' 
+          ? 'У вас еще нет сохраненных рецептов' 
+          : 'You don\'t have any saved recipes yet'
+      });
+    }
+  };
+  
+  const loadRecipe = (recipe: { 
+    id: number; 
+    name: string; 
+    servings: number; 
+    weight: number; 
+    ingredients: Ingredient[];
+    date: string;
+  }) => {
+    setRecipeName(recipe.name);
+    setServings(recipe.servings);
+    setRecipeWeight(recipe.weight);
+    setIngredients(recipe.ingredients);
+  };
+  
   const totals = calculateTotals();
   const macroData = [
     { name: t.protein, value: totals.protein, color: "#3B82F6" },
@@ -422,7 +487,7 @@ const RecipeCalculator = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={() => toast.info(t.loadRecipe, { description: language === 'ru' ? "Функция будет доступна в следующем обновлении" : "This feature will be available in the next update" })}>
+              <Button variant="outline" onClick={handleLoadRecipe}>
                 <Upload className="h-4 w-4 mr-2" />
                 {t.loadRecipe}
               </Button>
