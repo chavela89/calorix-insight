@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type LanguageContextType = {
@@ -149,7 +150,6 @@ const translations = {
     dinner: "Ужин",
     snack: "Перекус",
     macroDistribution: "Распределение БЖУ",
-    weeklyProgress: "Недельный прогресс",
     protein: "Белки",
     carbs: "Углеводы",
     fat: "Жиры",
@@ -161,11 +161,9 @@ const translations = {
     home: "Главная",
     
     // Recipe calculator
-    recipeCalculator: "Калькулятор рецептов",
     ingredients: "Ингредиенты",
     nutrition: "Пищевая ценность",
     servings: "Количество порций",
-    weight: "Вес готового блюда",
     recipeTitle: "Название рецепта",
     addIngredient: "Добавить ингредиент",
     ingredient: "Ингредиент",
@@ -350,7 +348,6 @@ const translations = {
     dinner: "Dinner",
     snack: "Snack",
     macroDistribution: "Macro Distribution",
-    weeklyProgress: "Weekly Progress",
     protein: "Protein",
     carbs: "Carbs",
     fat: "Fat",
