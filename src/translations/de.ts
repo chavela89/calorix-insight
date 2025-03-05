@@ -1,5 +1,5 @@
 
-export const deTranslations = {
+const de = {
   dashboard: "Instrumententafel",
   nutrition: "Ernährung",
   settings: "Einstellungen",
@@ -13,3 +13,6 @@ export const deTranslations = {
   mySavedRecipes: "Meine gespeicherten Rezepte"
   // Add more translations as needed
 };
+
+export const deTranslations = de;
+export default de;

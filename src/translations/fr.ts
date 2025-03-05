@@ -1,5 +1,5 @@
 
-export const frTranslations = {
+const fr = {
   dashboard: "Tableau de bord",
   nutrition: "Nutrition",
   settings: "Paramètres",
@@ -13,3 +13,6 @@ export const frTranslations = {
   mySavedRecipes: "Mes recettes sauvegardées"
   // Add more translations as needed
 };
+
+export const frTranslations = fr;
+export default fr;

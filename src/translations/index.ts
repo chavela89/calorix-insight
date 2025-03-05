@@ -1,8 +1,8 @@
 
 import ru from "./ru";
 import en from "./en";
-import de from "./de";
-import es from "./es";
-import fr from "./fr";
+import { deTranslations as de } from "./de";
+import { esTranslations as es } from "./es";
+import { frTranslations as fr } from "./fr";
 
 export { ru, en, de, es, fr };
