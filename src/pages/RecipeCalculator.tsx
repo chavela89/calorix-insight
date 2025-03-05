@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -8,11 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { Plus, Trash2, Scanner, Calculator, Save, Upload } from "lucide-react";
+import { Plus, Trash2, ScanBarcode, Calculator, Save, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/context/LanguageContext";
 
-// Define ingredient type
 interface Ingredient {
   id: string;
   name: string;
@@ -25,7 +23,6 @@ interface Ingredient {
   price: number;
 }
 
-// Sample ingredient database with nutrition information per 100g
 const ingredientDatabase: Record<string, { 
   calories: number; 
   protein: number; 
@@ -61,7 +58,6 @@ const RecipeCalculator = () => {
   const [amount, setAmount] = useState(100);
   const [unit, setUnit] = useState("g");
   
-  // Load stored recipes on mount
   useEffect(() => {
     const savedRecipes = localStorage.getItem('recipes');
     if (savedRecipes) {
@@ -78,12 +74,9 @@ const RecipeCalculator = () => {
     }
   }, [t]);
   
-  // Calculate nutrition totals for the recipe
   const calculateTotals = () => {
     return ingredients.reduce((acc, ingredient) => {
-      // Calculate the nutrition based on the amount
-      const factor = ingredient.amount / 100; // nutritional data is per 100g/ml
-      
+      const factor = ingredient.amount / 100;
       return {
         calories: acc.calories + ingredient.calories * factor,
         protein: acc.protein + ingredient.protein * factor,
@@ -94,7 +87,6 @@ const RecipeCalculator = () => {
     }, { calories: 0, protein: 0, carbs: 0, fat: 0, price: 0 });
   };
   
-  // Calculate per serving values
   const calculatePerServing = (totals: { 
     calories: number; 
     protein: number; 
@@ -111,7 +103,6 @@ const RecipeCalculator = () => {
     };
   };
   
-  // Calculate per 100g values
   const calculatePer100g = (totals: { 
     calories: number; 
     protein: number; 
@@ -128,7 +119,6 @@ const RecipeCalculator = () => {
     };
   };
   
-  // Add a new ingredient to the recipe
   const addIngredient = () => {
     if (!selectedIngredient) {
       toast.error(t.ingredient, {
@@ -154,7 +144,6 @@ const RecipeCalculator = () => {
     
     setIngredients([...ingredients, newIngredient]);
     
-    // Reset input fields
     setSelectedIngredient("");
     setAmount(100);
     setUnit("g");
@@ -164,12 +153,10 @@ const RecipeCalculator = () => {
     });
   };
   
-  // Remove an ingredient from the recipe
   const removeIngredient = (id: string) => {
     setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
   };
   
-  // Get display name for ingredient
   const getIngredientDisplayName = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
       ru: {
@@ -207,12 +194,10 @@ const RecipeCalculator = () => {
     return language === 'ru' ? translations.ru[key] || key : translations.en[key] || key;
   };
   
-  // Format numbers to display nicely
   const formatNumber = (num: number) => {
     return Math.round(num * 10) / 10;
   };
   
-  // Save the recipe to local storage
   const saveRecipe = () => {
     if (!recipeName) {
       toast.error(t.recipeTitle, {
@@ -237,7 +222,6 @@ const RecipeCalculator = () => {
       date: new Date().toISOString()
     };
     
-    // Get existing recipes from local storage
     const savedRecipes = localStorage.getItem('recipes');
     let recipes = [];
     
@@ -249,7 +233,6 @@ const RecipeCalculator = () => {
       }
     }
     
-    // Add new recipe and save back to local storage
     recipes.push(recipe);
     localStorage.setItem('recipes', JSON.stringify(recipes));
     
@@ -258,7 +241,6 @@ const RecipeCalculator = () => {
     });
   };
   
-  // Recalculate recipe for a different number of servings or weight
   const recalculateRecipe = () => {
     if (ingredients.length === 0) {
       toast.error(t.ingredients, {
@@ -276,7 +258,6 @@ const RecipeCalculator = () => {
       setRecipeWeight(targetWeight);
     }
     
-    // Adjust all ingredients by the factor
     const newIngredients = ingredients.map(ingredient => ({
       ...ingredient,
       amount: ingredient.amount * factor
@@ -289,7 +270,6 @@ const RecipeCalculator = () => {
     });
   };
   
-  // Prepare data for the nutrition pie chart
   const totals = calculateTotals();
   const macroData = [
     { name: t.protein, value: totals.protein, color: "#3B82F6" },
@@ -302,7 +282,6 @@ const RecipeCalculator = () => {
       <h1 className="text-3xl font-bold mb-6">{t.recipeCalculator}</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column - Recipe details and ingredients */}
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
@@ -356,7 +335,7 @@ const RecipeCalculator = () => {
                     size="sm" 
                     onClick={() => toast.info(t.scanIngredient, { description: language === 'ru' ? "Функция будет доступна в следующем обновлении" : "This feature will be available in the next update" })}
                   >
-                    <Scanner className="h-4 w-4 mr-2" />
+                    <ScanBarcode className="h-4 w-4 mr-2" />
                     {t.scanIngredient}
                   </Button>
                 </div>
@@ -455,9 +434,7 @@ const RecipeCalculator = () => {
           </Card>
         </div>
         
-        {/* Right column - Nutrition, cost, and recipe adjustment */}
         <div className="space-y-6">
-          {/* Nutrition card */}
           <Card>
             <CardHeader>
               <CardTitle>{t.nutritionFacts}</CardTitle>
@@ -547,7 +524,6 @@ const RecipeCalculator = () => {
             </CardContent>
           </Card>
           
-          {/* Recipe adjustment card */}
           <Card>
             <CardHeader>
               <CardTitle>{t.adjustRecipe}</CardTitle>

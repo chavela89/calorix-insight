@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type LanguageContextType = {
@@ -363,7 +362,6 @@ const translations = {
     home: "Home",
     
     // Recipe calculator
-    recipeCalculator: "Recipe Calculator",
     ingredients: "Ingredients",
     nutrition: "Nutrition",
     servings: "Servings",
