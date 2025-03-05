@@ -1,7 +1,8 @@
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface MacroDistributionProps {
   protein: number;
@@ -16,6 +17,8 @@ interface CustomTooltipProps {
 }
 
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+  const { t } = useLanguage();
+  
   if (active && payload && payload.length) {
     return (
       <div className="bg-popover p-2 rounded-md border shadow-sm">
@@ -29,17 +32,45 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
 };
 
 export function MacroDistribution({ protein, carbs, fat, className }: MacroDistributionProps) {
+  const { t } = useLanguage();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
+  
   const data = [
-    { name: "Белки", value: protein, color: "hsl(210 84% 60%)" },
-    { name: "Углеводы", value: carbs, color: "hsl(160 84% 60%)" },
-    { name: "Жиры", value: fat, color: "hsl(30 84% 60%)" }
+    { name: t.protein, value: protein, color: "hsl(210 84% 60%)" },
+    { name: t.carbs, value: carbs, color: "hsl(160 84% 60%)" },
+    { name: t.fat, value: fat, color: "hsl(30 84% 60%)" }
   ];
   
   const total = protein + carbs + fat;
   
+  // Update chart size on window resize
+  useEffect(() => {
+    const updateSize = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        setChartSize({ 
+          width, 
+          height: Math.min(width * 0.7, 200) // Responsive height based on width
+        });
+      }
+    };
+    
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    
+    return () => {
+      window.removeEventListener('resize', updateSize);
+    };
+  }, []);
+  
+  // Calculate inner and outer radius based on container size
+  const outerRadius = Math.min(chartSize.width, chartSize.height) * 0.35;
+  const innerRadius = outerRadius * 0.6;
+  
   return (
-    <div className={cn("flex flex-col space-y-4", className)}>
-      <h3 className="text-lg font-semibold">Распределение БЖУ</h3>
+    <div className={cn("flex flex-col space-y-4", className)} ref={containerRef}>
+      <h3 className="text-lg font-semibold">{t.macroDistribution}</h3>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -47,8 +78,8 @@ export function MacroDistribution({ protein, carbs, fat, className }: MacroDistr
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={80}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
               paddingAngle={2}
               dataKey="value"
             >

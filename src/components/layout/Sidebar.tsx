@@ -1,6 +1,6 @@
 
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import {
   BarChart2,
   Calendar,
@@ -13,6 +13,7 @@ import {
   Apple,
   Activity,
   Lightbulb,
+  Calculator
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -53,10 +54,11 @@ function SidebarNavItem({ icon, label, to, isActive }: SidebarNavItemProps) {
 
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const { t } = useLanguage();
+  const location = useLocation();
   
   return (
     <>
-      {/* Overlay для мобильных устройств */}
+      {/* Overlay for mobile devices */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-10 md:hidden"
@@ -64,13 +66,13 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
         />
       )}
       
-      {/* Боковая панель */}
+      {/* Sidebar */}
       <div
         className={cn(
           "fixed inset-y-0 left-0 z-20 flex h-full w-60 flex-col bg-background border-r transition-transform duration-300 ease-in-out",
-          "shadow-lg md:shadow-none", // Тень только для мобильной версии
+          "shadow-lg md:shadow-none", // Shadow only for mobile version
           isOpen ? "translate-x-0" : "-translate-x-full",
-          "md:translate-x-0" // На десктопе всегда видима
+          "md:translate-x-0" // Always visible on desktop
         )}
       >
         <div className="flex items-center justify-between border-b px-3 py-2.5">
@@ -85,7 +87,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             className="md:hidden"
           >
             <ChevronLeft className="h-5 w-5" />
-            <span className="sr-only">Закрыть меню</span>
+            <span className="sr-only">{t.close}</span>
           </Button>
         </div>
         <ScrollArea className="flex-1 py-1.5">
@@ -114,6 +116,11 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
               to="/planner"
               icon={<Calendar className="h-4 w-4" />}
               label={t.mealPlanner}
+            />
+            <SidebarNavItem
+              to="/recipe-calculator"
+              icon={<Calculator className="h-4 w-4" />}
+              label={t.recipeCalculator}
             />
             <SidebarNavItem
               to="/recommendations"

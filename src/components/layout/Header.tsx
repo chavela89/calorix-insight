@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { User2, BellIcon, ArrowLeft, Apple, Palette } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { User2, BellIcon, ArrowLeft, Apple, Palette, Menu } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { 
   DropdownMenu,
@@ -15,10 +15,13 @@ import {
 import { toast } from "sonner";
 import { useTheme } from "@/context/ThemeContext";
 import { ThemeType } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Header = ({ goBack }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const { t } = useLanguage();
   
   const [notifications, setNotifications] = useState([
     {
@@ -83,11 +86,30 @@ const Header = ({ goBack }) => {
       });
     }
   };
+  
+  // Handle back button to go to home when on main routes
+  const handleBackNavigation = () => {
+    if (location.pathname === '/' || 
+        location.pathname === '/nutrition' || 
+        location.pathname === '/progress' ||
+        location.pathname === '/statistics' ||
+        location.pathname === '/planner' ||
+        location.pathname === '/recommendations' ||
+        location.pathname === '/achievements' ||
+        location.pathname === '/health' ||
+        location.pathname === '/profile' ||
+        location.pathname === '/settings' ||
+        location.pathname === '/recipe-calculator') {
+      navigate('/');
+    } else {
+      goBack();
+    }
+  };
 
   return (
     <header className="border-b flex justify-between items-center h-14 px-4 sticky top-0 bg-background z-10">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" onClick={goBack} className="mr-2">
+        <Button variant="ghost" size="icon" onClick={handleBackNavigation} className="mr-2" title={t.home}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <Link to="/" className="flex items-center gap-2">
@@ -177,6 +199,16 @@ const Header = ({ goBack }) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        
+        {/* Mobile menu button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="md:hidden" 
+          onClick={() => document.dispatchEvent(new Event('toggle-sidebar'))}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
       </div>
     </header>
   );

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,6 +17,7 @@ import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Sample data
 const caloriesData = [1800, 2100, 1950, 2050, 1800, 1600, 1900];
@@ -69,6 +71,7 @@ const targets = {
 };
 
 const Index = () => {
+  const { t, language } = useLanguage();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [openMealDialog, setOpenMealDialog] = useState(false);
   const [currentMealType, setCurrentMealType] = useState("");
@@ -79,7 +82,7 @@ const Index = () => {
       day: 'numeric', 
       month: 'long' 
     };
-    return date.toLocaleDateString('ru-RU', options);
+    return date.toLocaleDateString(language === 'ru' ? 'ru-RU' : 'en-US', options);
   };
 
   const goToPreviousDay = () => {
@@ -105,20 +108,40 @@ const Index = () => {
 
   const handleMealSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(`Продукты добавлены в ${currentMealType}`, {
-      description: "Данные успешно сохранены и добавлены в дневник питания",
+    toast.success(`${t.add}: ${currentMealType}`, {
+      description: t.save,
     });
     setOpenMealDialog(false);
   };
 
+  // Ref to measure tabs container width for responsive sizing
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [tabsWidth, setTabsWidth] = useState(0);
+  
+  // Update width measurement on resize
+  useEffect(() => {
+    const updateWidth = () => {
+      if (tabsRef.current) {
+        setTabsWidth(tabsRef.current.offsetWidth);
+      }
+    };
+    
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    
+    return () => {
+      window.removeEventListener('resize', updateWidth);
+    };
+  }, []);
+
   return (
-    <div className="container max-w-7xl mx-auto animate-fade-in">
+    <div className="container max-w-7xl mx-auto animate-fade-in py-4">
       <div className="flex flex-col space-y-6">
         {/* Date navigation */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Дневник питания</h1>
+          <h1 className="text-2xl font-bold">{t.nutritionJournal}</h1>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="icon" onClick={goToPreviousDay}>
+            <Button variant="outline" size="icon" onClick={goToPreviousDay} title={t.back}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button 
@@ -128,7 +151,7 @@ const Index = () => {
             >
               <Calendar className="h-4 w-4" />
               <span className="hidden sm:inline">{formatDate(currentDate)}</span>
-              <span className="sm:hidden">Сегодня</span>
+              <span className="sm:hidden">{t.today}</span>
             </Button>
             <Button variant="outline" size="icon" onClick={goToNextDay}>
               <ChevronRight className="h-4 w-4" />
@@ -154,85 +177,87 @@ const Index = () => {
               <Card className="shadow-sm">
                 <CardContent className="p-6 space-y-4">
                   <NutrientProgressBar 
-                    label="Белки" 
+                    label={t.protein} 
                     current={totalProtein} 
                     target={targets.protein} 
-                    unit="г" 
+                    unit={t.kg === "kg" ? "g" : "г"} 
                     color="bg-blue-500" 
                   />
                   <NutrientProgressBar 
-                    label="Углеводы" 
+                    label={t.carbs} 
                     current={totalCarbs} 
                     target={targets.carbs} 
-                    unit="г" 
+                    unit={t.kg === "kg" ? "g" : "г"} 
                     color="bg-green-500" 
                   />
                   <NutrientProgressBar 
-                    label="Жиры" 
+                    label={t.fat} 
                     current={totalFat} 
                     target={targets.fat} 
-                    unit="г" 
+                    unit={t.kg === "kg" ? "g" : "г"} 
                     color="bg-amber-500" 
                   />
                 </CardContent>
               </Card>
             </div>
 
-            <Tabs defaultValue="meals" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="meals">Приемы пищи</TabsTrigger>
-                <TabsTrigger value="analytics">Аналитика</TabsTrigger>
-              </TabsList>
-              <TabsContent value="meals" className="space-y-4 mt-4 animate-in">
-                <MealCard 
-                  mealType="breakfast" 
-                  title="Завтрак"
-                  calories={meals.breakfast.reduce((sum, item) => sum + item.calories, 0)}
-                  items={meals.breakfast}
-                  onAddMeal={() => handleAddMeal("завтрак")}
-                />
-                <MealCard 
-                  mealType="lunch" 
-                  title="Обед"
-                  calories={meals.lunch.reduce((sum, item) => sum + item.calories, 0)}
-                  items={meals.lunch}
-                  onAddMeal={() => handleAddMeal("обед")}
-                />
-                <MealCard 
-                  mealType="dinner" 
-                  title="Ужин"
-                  calories={meals.dinner.reduce((sum, item) => sum + item.calories, 0)}
-                  items={meals.dinner}
-                  onAddMeal={() => handleAddMeal("ужин")}
-                />
-                <MealCard 
-                  mealType="snack" 
-                  title="Перекус"
-                  calories={meals.snack.reduce((sum, item) => sum + item.calories, 0)}
-                  items={meals.snack}
-                  onAddMeal={() => handleAddMeal("перекус")}
-                />
-              </TabsContent>
-              <TabsContent value="analytics" className="space-y-4 mt-4 animate-in">
-                <Card className="shadow-sm">
-                  <CardContent className="pt-6">
-                    <MacroDistribution 
-                      protein={totalProtein}
-                      carbs={totalCarbs}
-                      fat={totalFat}
-                    />
-                  </CardContent>
-                </Card>
-                <Card className="shadow-sm">
-                  <CardContent className="pt-6">
-                    <WeeklyProgress 
-                      caloriesData={caloriesData}
-                      proteinData={proteinData}
-                    />
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+            <div ref={tabsRef}>
+              <Tabs defaultValue="meals" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="meals">{t.meals}</TabsTrigger>
+                  <TabsTrigger value="analytics">{t.analytics}</TabsTrigger>
+                </TabsList>
+                <TabsContent value="meals" className="space-y-4 mt-4 animate-in">
+                  <MealCard 
+                    mealType="breakfast" 
+                    title={t.breakfast}
+                    calories={meals.breakfast.reduce((sum, item) => sum + item.calories, 0)}
+                    items={meals.breakfast}
+                    onAddMeal={() => handleAddMeal(t.breakfast)}
+                  />
+                  <MealCard 
+                    mealType="lunch" 
+                    title={t.lunch}
+                    calories={meals.lunch.reduce((sum, item) => sum + item.calories, 0)}
+                    items={meals.lunch}
+                    onAddMeal={() => handleAddMeal(t.lunch)}
+                  />
+                  <MealCard 
+                    mealType="dinner" 
+                    title={t.dinner}
+                    calories={meals.dinner.reduce((sum, item) => sum + item.calories, 0)}
+                    items={meals.dinner}
+                    onAddMeal={() => handleAddMeal(t.dinner)}
+                  />
+                  <MealCard 
+                    mealType="snack" 
+                    title={t.snack}
+                    calories={meals.snack.reduce((sum, item) => sum + item.calories, 0)}
+                    items={meals.snack}
+                    onAddMeal={() => handleAddMeal(t.snack)}
+                  />
+                </TabsContent>
+                <TabsContent value="analytics" className="space-y-4 mt-4 animate-in">
+                  <Card className="shadow-sm">
+                    <CardContent className="pt-6">
+                      <MacroDistribution 
+                        protein={totalProtein}
+                        carbs={totalCarbs}
+                        fat={totalFat}
+                      />
+                    </CardContent>
+                  </Card>
+                  <Card className="shadow-sm">
+                    <CardContent className="pt-6">
+                      <WeeklyProgress 
+                        caloriesData={caloriesData}
+                        proteinData={proteinData}
+                      />
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
 
           {/* Right column */}
@@ -249,27 +274,27 @@ const Index = () => {
       <Dialog open={openMealDialog} onOpenChange={setOpenMealDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Добавление продуктов в {currentMealType}</DialogTitle>
+            <DialogTitle>{t.add}: {currentMealType}</DialogTitle>
             <DialogDescription>
-              Добавьте продукты и блюда, которые вы употребили
+              {t.add}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleMealSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="product" className="text-right">
-                  Продукт
+                  {t.ingredient}
                 </Label>
                 <Input
                   id="product"
-                  placeholder="Например: Куриная грудка"
+                  placeholder={language === 'ru' ? "Например: Куриная грудка" : "Example: Chicken breast"}
                   className="col-span-3"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="weight" className="text-right">
-                  Вес (г)
+                  {t.weight} (г)
                 </Label>
                 <Input
                   id="weight"
@@ -281,7 +306,7 @@ const Index = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Добавить</Button>
+              <Button type="submit">{t.add}</Button>
             </DialogFooter>
           </form>
         </DialogContent>

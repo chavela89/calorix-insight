@@ -17,6 +17,7 @@ import Health from "@/pages/Health";
 import Profile from "@/pages/Profile";
 import Settings from "@/pages/Settings";
 import Recommendations from "@/pages/Recommendations";
+import RecipeCalculator from "@/pages/RecipeCalculator";
 import NotFound from "@/pages/NotFound";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -43,6 +44,7 @@ function App() {
                   <Route path="/health" element={<Health />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/settings" element={<Settings />} />
+                  <Route path="/recipe-calculator" element={<RecipeCalculator />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>

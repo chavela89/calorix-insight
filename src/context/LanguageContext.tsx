@@ -7,7 +7,7 @@ type LanguageContextType = {
   t: Record<string, string>;
 };
 
-// Default translations for essential UI elements
+// Comprehensive translations for the entire application
 const translations = {
   ru: {
     // Sidebar menu
@@ -21,6 +21,7 @@ const translations = {
     health: "Здоровье",
     myProfile: "Мой профиль",
     settings: "Настройки",
+    recipeCalculator: "Калькулятор рецептов",
     
     // Common UI elements
     save: "Сохранить",
@@ -98,6 +99,7 @@ const translations = {
     reportBugs: "Сообщить об ошибке или проблеме",
     appVersion: "Версия приложения: 1.0.0",
     logout: "Выйти из аккаунта",
+    removeAllData: "Это действие удалит все ваши данные",
     
     // Health page
     healthTitle: "Здоровье",
@@ -134,7 +136,79 @@ const translations = {
     steps: "шагов",
     cm: "см",
     kg: "кг",
-    mmHg: "мм рт.ст."
+    mmHg: "мм рт.ст.",
+    
+    // Dashboard and nutrition
+    nutritionJournal: "Дневник питания",
+    caloriesConsumed: "Потреблено калорий",
+    caloriesRemaining: "Осталось калорий",
+    caloriesTotal: "Всего калорий",
+    meals: "Приемы пищи",
+    analytics: "Аналитика",
+    breakfast: "Завтрак",
+    lunch: "Обед",
+    dinner: "Ужин",
+    snack: "Перекус",
+    macroDistribution: "Распределение БЖУ",
+    weeklyProgress: "Недельный прогресс",
+    protein: "Белки",
+    carbs: "Углеводы",
+    fat: "Жиры",
+    today: "Сегодня",
+    
+    // Mobile menu
+    menu: "Меню",
+    close: "Закрыть",
+    home: "Главная",
+    
+    // Recipe calculator
+    recipeCalculator: "Калькулятор рецептов",
+    ingredients: "Ингредиенты",
+    nutrition: "Пищевая ценность",
+    servings: "Количество порций",
+    weight: "Вес готового блюда",
+    recipeTitle: "Название рецепта",
+    addIngredient: "Добавить ингредиент",
+    ingredient: "Ингредиент",
+    amount: "Количество",
+    unit: "Единица измерения",
+    price: "Цена",
+    totalCalories: "Всего калорий",
+    totalProtein: "Всего белков",
+    totalCarbs: "Всего углеводов",
+    totalFat: "Всего жиров",
+    perServing: "На порцию",
+    per100g: "На 100г",
+    totalCost: "Общая стоимость",
+    costPerServing: "Стоимость за порцию",
+    saveRecipe: "Сохранить рецепт",
+    loadRecipe: "Загрузить рецепт",
+    scanIngredient: "Сканировать ингредиент",
+    adjustRecipe: "Настроить рецепт",
+    recalculate: "Пересчитать",
+    alternativeIngredients: "Альтернативные ингредиенты",
+    shoppingList: "Список покупок",
+    addToMealPlan: "Добавить в план питания",
+    recipeRecommendations: "Рекомендации по рецепту",
+    nutritionTips: "Советы по питанию",
+    myRecipes: "Мои рецепты",
+    popularRecipes: "Популярные рецепты",
+    newRecipe: "Новый рецепт",
+    editRecipe: "Редактировать рецепт",
+    gram: "грамм",
+    ml: "мл",
+    tbsp: "ст. ложка",
+    tsp: "ч. ложка",
+    cup: "чашка",
+    piece: "шт",
+    nutritionFacts: "Пищевая ценность",
+    calories: "Калории",
+    calculationBasis: "Основа для расчета",
+    byServings: "По порциям",
+    byWeight: "По весу",
+    targetServings: "Целевое количество порций",
+    targetWeight: "Целевой вес (г)",
+    calculateBy: "Рассчитать по"
   },
   en: {
     // Sidebar menu
@@ -148,6 +222,7 @@ const translations = {
     health: "Health",
     myProfile: "My Profile",
     settings: "Settings",
+    recipeCalculator: "Recipe Calculator",
     
     // Common UI elements
     save: "Save",
@@ -225,6 +300,7 @@ const translations = {
     reportBugs: "Report a bug or issue",
     appVersion: "App version: 1.0.0",
     logout: "Logout",
+    removeAllData: "This action will delete all your data",
     
     // Health page
     healthTitle: "Health",
@@ -261,7 +337,79 @@ const translations = {
     steps: "steps",
     cm: "cm",
     kg: "kg",
-    mmHg: "mmHg"
+    mmHg: "mmHg",
+    
+    // Dashboard and nutrition
+    nutritionJournal: "Nutrition Journal",
+    caloriesConsumed: "Calories Consumed",
+    caloriesRemaining: "Calories Remaining",
+    caloriesTotal: "Total Calories",
+    meals: "Meals",
+    analytics: "Analytics",
+    breakfast: "Breakfast",
+    lunch: "Lunch",
+    dinner: "Dinner",
+    snack: "Snack",
+    macroDistribution: "Macro Distribution",
+    weeklyProgress: "Weekly Progress",
+    protein: "Protein",
+    carbs: "Carbs",
+    fat: "Fat",
+    today: "Today",
+    
+    // Mobile menu
+    menu: "Menu",
+    close: "Close",
+    home: "Home",
+    
+    // Recipe calculator
+    recipeCalculator: "Recipe Calculator",
+    ingredients: "Ingredients",
+    nutrition: "Nutrition",
+    servings: "Servings",
+    weight: "Weight",
+    recipeTitle: "Recipe Title",
+    addIngredient: "Add Ingredient",
+    ingredient: "Ingredient",
+    amount: "Amount",
+    unit: "Unit",
+    price: "Price",
+    totalCalories: "Total Calories",
+    totalProtein: "Total Protein",
+    totalCarbs: "Total Carbs",
+    totalFat: "Total Fat",
+    perServing: "Per Serving",
+    per100g: "Per 100g",
+    totalCost: "Total Cost",
+    costPerServing: "Cost Per Serving",
+    saveRecipe: "Save Recipe",
+    loadRecipe: "Load Recipe",
+    scanIngredient: "Scan Ingredient",
+    adjustRecipe: "Adjust Recipe",
+    recalculate: "Recalculate",
+    alternativeIngredients: "Alternative Ingredients",
+    shoppingList: "Shopping List",
+    addToMealPlan: "Add to Meal Plan",
+    recipeRecommendations: "Recipe Recommendations",
+    nutritionTips: "Nutrition Tips",
+    myRecipes: "My Recipes",
+    popularRecipes: "Popular Recipes",
+    newRecipe: "New Recipe",
+    editRecipe: "Edit Recipe",
+    gram: "gram",
+    ml: "ml",
+    tbsp: "tbsp",
+    tsp: "tsp",
+    cup: "cup",
+    piece: "piece",
+    nutritionFacts: "Nutrition Facts",
+    calories: "Calories",
+    calculationBasis: "Calculation Basis",
+    byServings: "By Servings",
+    byWeight: "By Weight",
+    targetServings: "Target Servings",
+    targetWeight: "Target Weight (g)",
+    calculateBy: "Calculate By"
   }
 };
 
@@ -287,6 +435,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const prevLanguage = localStorage.getItem("prev-language");
     if (prevLanguage && prevLanguage !== language) {
       localStorage.setItem("prev-language", language);
+      // Force reload to apply translations everywhere
+      window.location.reload();
     } else if (!prevLanguage) {
       localStorage.setItem("prev-language", language);
     }
