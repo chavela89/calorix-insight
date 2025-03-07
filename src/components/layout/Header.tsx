@@ -28,59 +28,70 @@ const Header = ({ goBack }) => {
       id: 1,
       title: language === 'ru' ? "Внесите приемы пищи" : 
              language === 'es' ? "Registre sus comidas" :
+             language === 'zh' ? "记录您的餐点" :
              "Log your meals",
       description: language === 'ru' ? "Вы еще не добавили обед. Внесите данные, чтобы отслеживать прогресс." : 
                    language === 'es' ? "Aún no ha añadido el almuerzo. Introduzca datos para seguir su progreso." :
+                   language === 'zh' ? "您尚未添加午餐。请输入数据以跟踪您的进度。" :
                    "You haven't added lunch yet. Enter data to track your progress.",
       date: language === 'ru' ? "Сегодня" : 
             language === 'es' ? "Hoy" :
+            language === 'zh' ? "今天" :
             "Today"
     },
     {
       id: 2,
       title: language === 'ru' ? "Поздравляем!" : 
              language === 'es' ? "¡Felicitaciones!" :
+             language === 'zh' ? "恭喜！" :
              "Congratulations!",
       description: language === 'ru' ? "Вы достигли своей цели по белку 7 дней подряд!" : 
                    language === 'es' ? "¡Ha alcanzado su objetivo de proteínas durante 7 días consecutivos!" :
+                   language === 'zh' ? "您连续7天达到了蛋白质目标！" :
                    "You've reached your protein goal 7 days in a row!",
       date: language === 'ru' ? "Вчера" : 
             language === 'es' ? "Ayer" :
+            language === 'zh' ? "昨天" :
             "Yesterday"
     },
     {
       id: 3,
       title: language === 'ru' ? "Новая функция" : 
              language === 'es' ? "Nueva función" :
+             language === 'zh' ? "新功能" :
              "New feature",
       description: language === 'ru' ? "Попробуйте новую функцию анализа приемов пищи с помощью AI." : 
                    language === 'es' ? "Pruebe la nueva función de análisis de comidas con IA." :
+                   language === 'zh' ? "尝试使用AI的新餐食分析功能。" :
                    "Try the new meal analysis function using AI.",
       date: language === 'ru' ? "2 дня назад" : 
             language === 'es' ? "Hace 2 días" :
+            language === 'zh' ? "2天前" :
             "2 days ago"
     }
   ]);
 
   const [themes] = useState<{id: ThemeType, name: string}[]>([
-    { id: 'light', name: language === 'ru' ? 'Светлая' : language === 'es' ? 'Claro' : 'Light' },
-    { id: 'dark', name: language === 'ru' ? 'Темная' : language === 'es' ? 'Oscuro' : 'Dark' },
-    { id: 'creamy', name: language === 'ru' ? 'Сливочная' : language === 'es' ? 'Crema' : 'Creamy' },
-    { id: 'blue-gray', name: language === 'ru' ? 'Сине-серая' : language === 'es' ? 'Azul-gris' : 'Blue-gray' },
-    { id: 'green', name: language === 'ru' ? 'Зеленая' : language === 'es' ? 'Verde' : 'Green' },
-    { id: 'coral', name: language === 'ru' ? 'Коралловая' : language === 'es' ? 'Coral' : 'Coral' },
-    { id: 'purple', name: language === 'ru' ? 'Фиолетовая' : language === 'es' ? 'Morado' : 'Purple' },
-    { id: 'blue', name: language === 'ru' ? 'Синяя' : language === 'es' ? 'Azul' : 'Blue' },
-    { id: 'yellow', name: language === 'ru' ? 'Желтая' : language === 'es' ? 'Amarillo' : 'Yellow' },
-    { id: 'system', name: language === 'ru' ? 'Системная' : language === 'es' ? 'Sistema' : 'System' }
+    { id: 'light', name: language === 'ru' ? 'Светлая' : language === 'es' ? 'Claro' : language === 'zh' ? '浅色' : 'Light' },
+    { id: 'dark', name: language === 'ru' ? 'Темная' : language === 'es' ? 'Oscuro' : language === 'zh' ? '深色' : 'Dark' },
+    { id: 'creamy', name: language === 'ru' ? 'Сливочная' : language === 'es' ? 'Crema' : language === 'zh' ? '奶油色' : 'Creamy' },
+    { id: 'blue-gray', name: language === 'ru' ? 'Сине-серая' : language === 'es' ? 'Azul-gris' : language === 'zh' ? '蓝灰色' : 'Blue-gray' },
+    { id: 'green', name: language === 'ru' ? 'Зеленая' : language === 'es' ? 'Verde' : language === 'zh' ? '绿色' : 'Green' },
+    { id: 'coral', name: language === 'ru' ? 'Коралловая' : language === 'es' ? 'Coral' : language === 'zh' ? '珊瑚色' : 'Coral' },
+    { id: 'purple', name: language === 'ru' ? 'Фиолетовая' : language === 'es' ? 'Morado' : language === 'zh' ? '紫色' : 'Purple' },
+    { id: 'blue', name: language === 'ru' ? 'Синяя' : language === 'es' ? 'Azul' : language === 'zh' ? '蓝色' : 'Blue' },
+    { id: 'yellow', name: language === 'ru' ? 'Желтая' : language === 'es' ? 'Amarillo' : language === 'zh' ? '黄色' : 'Yellow' },
+    { id: 'system', name: language === 'ru' ? 'Системная' : language === 'es' ? 'Sistema' : language === 'zh' ? '系统' : 'System' }
   ]);
 
   const handleShowAllNotifications = () => {
     toast.info(language === 'ru' ? "Все уведомления" : 
               language === 'es' ? "Todas las notificaciones" : 
+              language === 'zh' ? "所有通知" :
               "All notifications", {
       description: language === 'ru' ? "Открыта страница всех уведомлений" : 
                   language === 'es' ? "Página de todas las notificaciones abierta" :
+                  language === 'zh' ? "所有通知页面已打开" :
                   "All notifications page opened"
     });
   };
@@ -90,9 +101,11 @@ const Header = ({ goBack }) => {
     const themeName = themes.find(t => t.id === themeId)?.name || themeId;
     toast.success(language === 'ru' ? `Тема изменена: ${themeName}` : 
                 language === 'es' ? `Tema cambiado: ${themeName}` : 
+                language === 'zh' ? `主题已更改: ${themeName}` :
                 `Theme changed: ${themeName}`, {
       description: language === 'ru' ? `Установлена ${themeName} тема` : 
                   language === 'es' ? `Tema ${themeName} establecido` :
+                  language === 'zh' ? `${themeName}主题已设置` :
                   `${themeName} theme set`
     });
   };
@@ -105,17 +118,21 @@ const Header = ({ goBack }) => {
     } else if (option === 'subscription') {
       toast.info(language === 'ru' ? "Подписка" : 
                 language === 'es' ? "Suscripción" : 
+                language === 'zh' ? "订阅" :
                 "Subscription", {
         description: language === 'ru' ? "Переход к странице подписки" : 
                     language === 'es' ? "Navegando a la página de suscripción" :
+                    language === 'zh' ? "正在导航到订阅页面" :
                     "Navigating to subscription page"
       });
     } else if (option === 'logout') {
       toast.info(language === 'ru' ? "Выход из аккаунта" : 
                 language === 'es' ? "Cierre de sesión" : 
+                language === 'zh' ? "退出登录" :
                 "Logged out", {
         description: language === 'ru' ? "Вы успешно вышли из своего аккаунта" : 
                     language === 'es' ? "Ha cerrado sesión exitosamente" :
+                    language === 'zh' ? "您已成功退出账户" :
                     "You have successfully logged out of your account"
       });
     }
@@ -177,7 +194,7 @@ const Header = ({ goBack }) => {
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="justify-center" onClick={handleShowAllNotifications}>
-              {language === 'ru' ? "Показать все" : language === 'es' ? "Mostrar todo" : "Show all"}
+              {t.allNotifications}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -189,7 +206,7 @@ const Header = ({ goBack }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{language === 'ru' ? "Тема оформления" : language === 'es' ? "Tema" : "Theme"}</DropdownMenuLabel>
+            <DropdownMenuLabel>{t.themeSettings}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {themes.map(themeOption => (
               <DropdownMenuItem 
@@ -214,7 +231,7 @@ const Header = ({ goBack }) => {
               <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-2">
                 <User2 className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="font-medium">{language === 'ru' ? "Александр" : language === 'es' ? "Alejandro" : "Alexander"}</p>
+              <p className="font-medium">{language === 'ru' ? "Александр" : language === 'es' ? "Alejandro" : language === 'zh' ? "亚历山大" : "Alexander"}</p>
               <p className="text-sm text-muted-foreground">{t.freePlan}</p>
             </div>
             <DropdownMenuSeparator />

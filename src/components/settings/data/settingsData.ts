@@ -4,6 +4,7 @@ export const languagesData = [
   { code: "ru", name: "Русский", flag: "🇷🇺" },
   { code: "en", name: "English", flag: "🇺🇸" },
   { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "zh", name: "中文", flag: "🇨🇳" },
 ];
 
 // Region data

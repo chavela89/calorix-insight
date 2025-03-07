@@ -48,12 +48,15 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
         setPaymentDialogOpen(false);
         toast.success(language === 'ru' ? "Подписка оформлена" : 
                       language === 'es' ? "Suscripción activada" : 
+                      language === 'zh' ? "订阅已激活" :
                       "Subscription activated", {
           description: language === 'ru' 
             ? `Вы успешно оформили подписку ${currentPlan}` 
             : language === 'es'
               ? `Ha suscrito con éxito al plan ${currentPlan}`
-              : `You have successfully subscribed to ${currentPlan}`
+              : language === 'zh'
+                ? `您已成功订阅${currentPlan}计划`
+                : `You have successfully subscribed to ${currentPlan}`
         });
       }, 2000);
     }, 2000);
@@ -94,7 +97,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
             <div className="p-4 border rounded-md hover:border-primary cursor-pointer transition-colors">
               <h5 className="font-medium mb-2">{t.premiumPlan}</h5>
               <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(299)}<span className="text-sm font-normal text-muted-foreground">/{t.month}</span></p>
-              <div className="space-y-0 mb-4">
+              <div className="flex flex-col items-start mb-4">
                 {renderFeature(t.advancedAnalytics)}
                 {renderFeature(t.personalCoaching)}
                 {renderFeature(t.unlimitedAccess)}
@@ -112,7 +115,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               <h5 className="font-medium mb-2">{t.yearlyPlan}</h5>
               <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(2499)}<span className="text-sm font-normal text-muted-foreground">/{t.year}</span></p>
               <Badge className="mb-2">{t.savings}</Badge>
-              <div className="space-y-0 mb-4">
+              <div className="flex flex-col items-start mb-4">
                 {renderFeature(t.premiumFeatures)}
                 {renderFeature(t.prioritySupport)}
                 {renderFeature(t.dataExport)}
@@ -135,6 +138,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
             <DialogTitle>
               {language === 'ru' ? "Оформление подписки" : 
                language === 'es' ? "Checkout de suscripción" : 
+               language === 'zh' ? "订阅结账" :
                "Subscription Checkout"}
             </DialogTitle>
             <DialogDescription>
@@ -142,7 +146,9 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                 ? `Подписка на ${currentPlan} - ${currency.symbol}${currentPrice}` 
                 : language === 'es'
                   ? `Suscripción a ${currentPlan} - ${currency.symbol}${currentPrice}`
-                  : `Subscribe to ${currentPlan} - ${currency.symbol}${currentPrice}`}
+                  : language === 'zh'
+                    ? `订阅${currentPlan} - ${currency.symbol}${currentPrice}`
+                    : `Subscribe to ${currentPlan} - ${currency.symbol}${currentPrice}`}
             </DialogDescription>
           </DialogHeader>
           
@@ -154,6 +160,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               <h3 className="text-lg font-medium mb-2">
                 {language === 'ru' ? "Платеж успешно выполнен!" : 
                  language === 'es' ? "¡Pago exitoso!" : 
+                 language === 'zh' ? "付款成功！" :
                  "Payment Successful!"}
               </h3>
               <p className="text-muted-foreground">
@@ -161,7 +168,9 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                   ? "Ваша подписка активирована. Спасибо за покупку!" 
                   : language === 'es'
                     ? "Su suscripción ha sido activada. ¡Gracias por su compra!"
-                    : "Your subscription has been activated. Thank you for your purchase!"}
+                    : language === 'zh'
+                      ? "您的订阅已激活。感谢您的购买！"
+                      : "Your subscription has been activated. Thank you for your purchase!"}
               </p>
             </div>
           ) : (
@@ -171,12 +180,14 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                   <Label htmlFor="cardName" className="text-right">
                     {language === 'ru' ? "Имя на карте" : 
                      language === 'es' ? "Nombre en la tarjeta" : 
+                     language === 'zh' ? "卡片上的姓名" :
                      "Name on Card"}
                   </Label>
                   <Input
                     id="cardName"
                     placeholder={language === 'ru' ? "Иван Иванов" : 
                                   language === 'es' ? "Juan Pérez" : 
+                                  language === 'zh' ? "张三" :
                                   "John Smith"}
                     className="col-span-3"
                     required
@@ -186,6 +197,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                   <Label htmlFor="cardNumber" className="text-right">
                     {language === 'ru' ? "Номер карты" : 
                      language === 'es' ? "Número de tarjeta" : 
+                     language === 'zh' ? "卡号" :
                      "Card Number"}
                   </Label>
                   <div className="col-span-3 relative">
@@ -204,6 +216,7 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                   <Label htmlFor="expiry" className="text-right">
                     {language === 'ru' ? "Срок действия" : 
                      language === 'es' ? "Fecha de caducidad" : 
+                     language === 'zh' ? "有效期" :
                      "Expiry Date"}
                   </Label>
                   <Input
@@ -230,15 +243,18 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                 <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>
                   {language === 'ru' ? "Отмена" : 
                    language === 'es' ? "Cancelar" : 
+                   language === 'zh' ? "取消" :
                    "Cancel"}
                 </Button>
                 <Button type="submit" disabled={isProcessing}>
                   {isProcessing 
                     ? (language === 'ru' ? "Обработка..." : 
                        language === 'es' ? "Procesando..." : 
+                       language === 'zh' ? "处理中..." :
                        "Processing...") 
                     : (language === 'ru' ? "Оплатить" : 
                        language === 'es' ? "Pagar ahora" : 
+                       language === 'zh' ? "立即付款" :
                        "Pay Now")}
                 </Button>
               </DialogFooter>
