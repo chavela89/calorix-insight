@@ -207,6 +207,17 @@ const zh = {
   recalculate: "重新计算",
   recipeTitle: "食谱标题",
   amount: "数量",
+  calories: "卡路里",
+  price: "价格",
+  
+  // Recipe Adjuster
+  adjustRecipe: "调整食谱",
+  calculationBasis: "计算基础",
+  byServings: "按份量",
+  byWeight: "按重量",
+  targetServings: "目标份量",
+  targetWeight: "目标重量",
+  per100g: "每100克",
   
   // Header
   allNotifications: "显示全部",

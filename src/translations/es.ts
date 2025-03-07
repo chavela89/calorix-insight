@@ -207,6 +207,17 @@ const es = {
   recalculate: "Recalcular",
   recipeTitle: "Título de la Receta",
   amount: "Cantidad",
+  calories: "Calorías",
+  price: "Precio",
+  
+  // Recipe Adjuster
+  adjustRecipe: "Ajustar Receta",
+  calculationBasis: "Base de Cálculo",
+  byServings: "Por Porciones",
+  byWeight: "Por Peso",
+  targetServings: "Porciones Objetivo",
+  targetWeight: "Peso Objetivo",
+  per100g: "Por 100g",
   
   // Header
   allNotifications: "Mostrar todas",

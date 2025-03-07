@@ -207,6 +207,17 @@ const ru = {
   recalculate: "Пересчитать",
   recipeTitle: "Название рецепта",
   amount: "Количество",
+  calories: "Калории",
+  price: "Стоимость",
+  
+  // Recipe Adjuster
+  adjustRecipe: "Настроить рецепт",
+  calculationBasis: "Основа для расчета",
+  byServings: "По порциям",
+  byWeight: "По весу",
+  targetServings: "Целевое количество порций",
+  targetWeight: "Целевой вес",
+  per100g: "На 100 грамм",
   
   // Header
   allNotifications: "Показать все",
