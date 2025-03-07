@@ -2,6 +2,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import en from '../translations/en';
 import ru from '../translations/ru';
+import es from '../translations/es';
 import { LanguageContextType } from './LanguageContextTypes';
 
 // Create a context with default values
@@ -15,7 +16,8 @@ const LanguageContext = createContext<LanguageContextType>({
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Initialize language from localStorage or default to 'ru'
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('language') || 'ru';
+    const storedLanguage = localStorage.getItem('language');
+    return (storedLanguage && ['ru', 'en', 'es'].includes(storedLanguage)) ? storedLanguage : 'ru';
   });
 
   // Get the appropriate translation based on the current language
@@ -23,6 +25,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     switch (lang) {
       case 'en':
         return en;
+      case 'es':
+        return es;
       case 'ru':
       default:
         return ru;

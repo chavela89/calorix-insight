@@ -117,7 +117,8 @@ const ru = {
   receivePush: "Получать push-уведомления",
   mealReminders: "Напоминания о приеме пищи",
   getMealReminders: "Получать напоминания о записи приемов пищи",
-  achievementNotifications: "Получать уведомления о достижениях",
+  achievementNotifications: "Уведомления о достижениях",
+  getAchievementNotifications: "Получать уведомления о достижениях",
   weeklyReports: "Еженедельные отчеты",
   getWeeklyReports: "Получать еженедельные отчеты о питании",
   subscription: "Подписка",
@@ -205,7 +206,16 @@ const ru = {
   loading: "Загрузка...",
   recalculate: "Пересчитать",
   recipeTitle: "Название рецепта",
-  amount: "Количество"
+  amount: "Количество",
+  
+  // Header
+  notifications: "Уведомления",
+  allNotifications: "Показать все",
+  themeSettings: "Тема оформления",
+  profile: "Мой профиль",
+  myAccount: "Мой аккаунт",
+  subscriptionStatus: "Бесплатный план",
+  logout: "Выйти"
 };
 
 export default ru;

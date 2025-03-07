@@ -16,7 +16,7 @@ interface RecipesDialogProps {
 }
 
 const RecipesDialog: React.FC<RecipesDialogProps> = ({ open, onOpenChange, onSelectRecipe }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<number | null>(null);
@@ -36,9 +36,11 @@ const RecipesDialog: React.FC<RecipesDialogProps> = ({ open, onOpenChange, onSel
       } catch (e) {
         console.error('Error parsing saved recipes:', e);
         toast.error(t.loadRecipe, {
-          description: t.language === 'ru' 
+          description: language === 'ru' 
             ? 'Ошибка при загрузке рецептов' 
-            : 'Error loading recipes'
+            : language === 'es'
+              ? 'Error al cargar recetas'
+              : 'Error loading recipes'
         });
       }
     }
@@ -57,9 +59,11 @@ const RecipesDialog: React.FC<RecipesDialogProps> = ({ open, onOpenChange, onSel
     setRecipes(updatedRecipes);
     
     toast.success(t.delete, {
-      description: t.language === 'ru' 
+      description: language === 'ru' 
         ? 'Рецепт успешно удален' 
-        : 'Recipe successfully deleted'
+        : language === 'es'
+          ? 'Receta eliminada con éxito'
+          : 'Recipe successfully deleted'
     });
     
     setConfirmDeleteOpen(false);
@@ -71,9 +75,11 @@ const RecipesDialog: React.FC<RecipesDialogProps> = ({ open, onOpenChange, onSel
     onOpenChange(false);
     
     toast.success(t.loadRecipe, {
-      description: t.language === 'ru' 
+      description: language === 'ru' 
         ? 'Рецепт успешно загружен' 
-        : 'Recipe successfully loaded'
+        : language === 'es'
+          ? 'Receta cargada con éxito'
+          : 'Recipe successfully loaded'
     });
   };
 
@@ -84,9 +90,11 @@ const RecipesDialog: React.FC<RecipesDialogProps> = ({ open, onOpenChange, onSel
           <DialogHeader>
             <DialogTitle>{t.savedRecipes}</DialogTitle>
             <DialogDescription>
-              {t.language === 'ru' 
+              {language === 'ru' 
                 ? 'Выберите рецепт для загрузки или удаления' 
-                : 'Select a recipe to load or delete'}
+                : language === 'es'
+                  ? 'Seleccione una receta para cargar o eliminar'
+                  : 'Select a recipe to load or delete'}
             </DialogDescription>
           </DialogHeader>
           
@@ -149,9 +157,11 @@ const RecipesDialog: React.FC<RecipesDialogProps> = ({ open, onOpenChange, onSel
           <AlertDialogHeader>
             <AlertDialogTitle>{t.confirmDelete}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t.language === 'ru' 
+              {language === 'ru' 
                 ? 'Вы уверены, что хотите удалить этот рецепт? Это действие нельзя отменить.' 
-                : 'Are you sure you want to delete this recipe? This action cannot be undone.'}
+                : language === 'es'
+                  ? '¿Está seguro de que desea eliminar esta receta? Esta acción no se puede deshacer.'
+                  : 'Are you sure you want to delete this recipe? This action cannot be undone.'}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

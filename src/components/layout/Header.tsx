@@ -21,53 +21,79 @@ const Header = ({ goBack }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const [notifications, setNotifications] = useState([
     {
       id: 1,
-      title: "Внесите приемы пищи",
-      description: "Вы еще не добавили обед. Внесите данные, чтобы отслеживать прогресс.",
-      date: "Сегодня"
+      title: language === 'ru' ? "Внесите приемы пищи" : 
+             language === 'es' ? "Registre sus comidas" :
+             "Log your meals",
+      description: language === 'ru' ? "Вы еще не добавили обед. Внесите данные, чтобы отслеживать прогресс." : 
+                   language === 'es' ? "Aún no ha añadido el almuerzo. Introduzca datos para seguir su progreso." :
+                   "You haven't added lunch yet. Enter data to track your progress.",
+      date: language === 'ru' ? "Сегодня" : 
+            language === 'es' ? "Hoy" :
+            "Today"
     },
     {
       id: 2,
-      title: "Поздравляем!",
-      description: "Вы достигли своей цели по белку 7 дней подряд!",
-      date: "Вчера"
+      title: language === 'ru' ? "Поздравляем!" : 
+             language === 'es' ? "¡Felicitaciones!" :
+             "Congratulations!",
+      description: language === 'ru' ? "Вы достигли своей цели по белку 7 дней подряд!" : 
+                   language === 'es' ? "¡Ha alcanzado su objetivo de proteínas durante 7 días consecutivos!" :
+                   "You've reached your protein goal 7 days in a row!",
+      date: language === 'ru' ? "Вчера" : 
+            language === 'es' ? "Ayer" :
+            "Yesterday"
     },
     {
       id: 3,
-      title: "Новая функция",
-      description: "Попробуйте новую функцию анализа приемов пищи с помощью AI.",
-      date: "2 дня назад"
+      title: language === 'ru' ? "Новая функция" : 
+             language === 'es' ? "Nueva función" :
+             "New feature",
+      description: language === 'ru' ? "Попробуйте новую функцию анализа приемов пищи с помощью AI." : 
+                   language === 'es' ? "Pruebe la nueva función de análisis de comidas con IA." :
+                   "Try the new meal analysis function using AI.",
+      date: language === 'ru' ? "2 дня назад" : 
+            language === 'es' ? "Hace 2 días" :
+            "2 days ago"
     }
   ]);
 
   const [themes] = useState<{id: ThemeType, name: string}[]>([
-    { id: 'light', name: 'Светлая' },
-    { id: 'dark', name: 'Темная' },
-    { id: 'creamy', name: 'Сливочная' },
-    { id: 'blue-gray', name: 'Сине-серая' },
-    { id: 'green', name: 'Зеленая' },
-    { id: 'coral', name: 'Коралловая' },
-    { id: 'purple', name: 'Фиолетовая' },
-    { id: 'blue', name: 'Синяя' },
-    { id: 'yellow', name: 'Желтая' },
-    { id: 'system', name: 'Системная' }
+    { id: 'light', name: language === 'ru' ? 'Светлая' : language === 'es' ? 'Claro' : 'Light' },
+    { id: 'dark', name: language === 'ru' ? 'Темная' : language === 'es' ? 'Oscuro' : 'Dark' },
+    { id: 'creamy', name: language === 'ru' ? 'Сливочная' : language === 'es' ? 'Crema' : 'Creamy' },
+    { id: 'blue-gray', name: language === 'ru' ? 'Сине-серая' : language === 'es' ? 'Azul-gris' : 'Blue-gray' },
+    { id: 'green', name: language === 'ru' ? 'Зеленая' : language === 'es' ? 'Verde' : 'Green' },
+    { id: 'coral', name: language === 'ru' ? 'Коралловая' : language === 'es' ? 'Coral' : 'Coral' },
+    { id: 'purple', name: language === 'ru' ? 'Фиолетовая' : language === 'es' ? 'Morado' : 'Purple' },
+    { id: 'blue', name: language === 'ru' ? 'Синяя' : language === 'es' ? 'Azul' : 'Blue' },
+    { id: 'yellow', name: language === 'ru' ? 'Желтая' : language === 'es' ? 'Amarillo' : 'Yellow' },
+    { id: 'system', name: language === 'ru' ? 'Системная' : language === 'es' ? 'Sistema' : 'System' }
   ]);
 
   const handleShowAllNotifications = () => {
-    toast.info("Все уведомления", {
-      description: "Открыта страница всех уведомлений"
+    toast.info(language === 'ru' ? "Все уведомления" : 
+              language === 'es' ? "Todas las notificaciones" : 
+              "All notifications", {
+      description: language === 'ru' ? "Открыта страница всех уведомлений" : 
+                  language === 'es' ? "Página de todas las notificaciones abierta" :
+                  "All notifications page opened"
     });
   };
 
   const handleThemeChange = (themeId: ThemeType) => {
     setTheme(themeId);
     const themeName = themes.find(t => t.id === themeId)?.name || themeId;
-    toast.success(`Тема изменена: ${themeName}`, {
-      description: `Установлена ${themeName} тема`
+    toast.success(language === 'ru' ? `Тема изменена: ${themeName}` : 
+                language === 'es' ? `Tema cambiado: ${themeName}` : 
+                `Theme changed: ${themeName}`, {
+      description: language === 'ru' ? `Установлена ${themeName} тема` : 
+                  language === 'es' ? `Tema ${themeName} establecido` :
+                  `${themeName} theme set`
     });
   };
 
@@ -77,12 +103,20 @@ const Header = ({ goBack }) => {
     } else if (option === 'settings') {
       navigate('/settings');
     } else if (option === 'subscription') {
-      toast.info("Подписка", {
-        description: "Переход к странице подписки"
+      toast.info(language === 'ru' ? "Подписка" : 
+                language === 'es' ? "Suscripción" : 
+                "Subscription", {
+        description: language === 'ru' ? "Переход к странице подписки" : 
+                    language === 'es' ? "Navegando a la página de suscripción" :
+                    "Navigating to subscription page"
       });
     } else if (option === 'logout') {
-      toast.info("Выход из аккаунта", {
-        description: "Вы успешно вышли из своего аккаунта"
+      toast.info(language === 'ru' ? "Выход из аккаунта" : 
+                language === 'es' ? "Cierre de sesión" : 
+                "Logged out", {
+        description: language === 'ru' ? "Вы успешно вышли из своего аккаунта" : 
+                    language === 'es' ? "Ha cerrado sesión exitosamente" :
+                    "You have successfully logged out of your account"
       });
     }
   };
@@ -130,7 +164,7 @@ const Header = ({ goBack }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>Уведомления</DropdownMenuLabel>
+            <DropdownMenuLabel>{t.notifications}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {notifications.map((notification) => (
               <DropdownMenuItem key={notification.id} className="flex flex-col items-start py-2 px-4 cursor-pointer">
@@ -143,7 +177,7 @@ const Header = ({ goBack }) => {
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="justify-center" onClick={handleShowAllNotifications}>
-              Показать все
+              {language === 'ru' ? "Показать все" : language === 'es' ? "Mostrar todo" : "Show all"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -155,7 +189,7 @@ const Header = ({ goBack }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Тема оформления</DropdownMenuLabel>
+            <DropdownMenuLabel>{language === 'ru' ? "Тема оформления" : language === 'es' ? "Tema" : "Theme"}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {themes.map(themeOption => (
               <DropdownMenuItem 
@@ -180,22 +214,22 @@ const Header = ({ goBack }) => {
               <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-2">
                 <User2 className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="font-medium">Александр</p>
-              <p className="text-sm text-muted-foreground">Бесплатный план</p>
+              <p className="font-medium">{language === 'ru' ? "Александр" : language === 'es' ? "Alejandro" : "Alexander"}</p>
+              <p className="text-sm text-muted-foreground">{t.freePlan}</p>
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleProfileOption('profile')}>
-              Мой профиль
+              {t.myProfile}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleProfileOption('settings')}>
-              Настройки
+              {t.settings}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleProfileOption('subscription')}>
-              Подписка
+              {t.subscription}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleProfileOption('logout')} className="text-destructive">
-              Выйти
+              {t.logout}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

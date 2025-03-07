@@ -46,14 +46,25 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
       // Display success message
       setTimeout(() => {
         setPaymentDialogOpen(false);
-        toast.success(language === 'ru' ? "Подписка оформлена" : "Subscription activated", {
+        toast.success(language === 'ru' ? "Подписка оформлена" : 
+                      language === 'es' ? "Suscripción activada" : 
+                      "Subscription activated", {
           description: language === 'ru' 
             ? `Вы успешно оформили подписку ${currentPlan}` 
-            : `You have successfully subscribed to ${currentPlan}`
+            : language === 'es'
+              ? `Ha suscrito con éxito al plan ${currentPlan}`
+              : `You have successfully subscribed to ${currentPlan}`
         });
       }, 2000);
     }, 2000);
   };
+
+  const renderFeature = (text: string) => (
+    <div className="flex items-start gap-2 mb-2">
+      <span className="text-primary mt-0.5">✓</span>
+      <span className="text-sm">{text}</span>
+    </div>
+  );
 
   return (
     <>
@@ -71,19 +82,10 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               </div>
               <Badge variant="outline">{t.active}</Badge>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-primary">✓</span>
-                <span className="text-sm">{t.basicTracking}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-primary">✓</span>
-                <span className="text-sm">{t.limitedHistory}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-primary">✓</span>
-                <span className="text-sm">{t.basicReports}</span>
-              </div>
+            <div className="space-y-1">
+              {renderFeature(t.basicTracking)}
+              {renderFeature(t.limitedHistory)}
+              {renderFeature(t.basicReports)}
             </div>
           </div>
 
@@ -92,23 +94,11 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
             <div className="p-4 border rounded-md hover:border-primary cursor-pointer transition-colors">
               <h5 className="font-medium mb-2">{t.premiumPlan}</h5>
               <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(299)}<span className="text-sm font-normal text-muted-foreground">/{t.month}</span></p>
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.advancedAnalytics}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.personalCoaching}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.unlimitedAccess}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.noAds}</span>
-                </div>
+              <div className="space-y-0 mb-4">
+                {renderFeature(t.advancedAnalytics)}
+                {renderFeature(t.personalCoaching)}
+                {renderFeature(t.unlimitedAccess)}
+                {renderFeature(t.noAds)}
               </div>
               <Button 
                 className="w-full" 
@@ -122,19 +112,10 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               <h5 className="font-medium mb-2">{t.yearlyPlan}</h5>
               <p className="text-xl font-bold mb-2">{currency.symbol}{calculatePrice(2499)}<span className="text-sm font-normal text-muted-foreground">/{t.year}</span></p>
               <Badge className="mb-2">{t.savings}</Badge>
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.premiumFeatures}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.prioritySupport}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span className="text-sm">{t.dataExport}</span>
-                </div>
+              <div className="space-y-0 mb-4">
+                {renderFeature(t.premiumFeatures)}
+                {renderFeature(t.prioritySupport)}
+                {renderFeature(t.dataExport)}
               </div>
               <Button 
                 className="w-full" 
@@ -152,12 +133,16 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
-              {language === 'ru' ? "Оформление подписки" : "Subscription Checkout"}
+              {language === 'ru' ? "Оформление подписки" : 
+               language === 'es' ? "Checkout de suscripción" : 
+               "Subscription Checkout"}
             </DialogTitle>
             <DialogDescription>
               {language === 'ru' 
                 ? `Подписка на ${currentPlan} - ${currency.symbol}${currentPrice}` 
-                : `Subscribe to ${currentPlan} - ${currency.symbol}${currentPrice}`}
+                : language === 'es'
+                  ? `Suscripción a ${currentPlan} - ${currency.symbol}${currentPrice}`
+                  : `Subscribe to ${currentPlan} - ${currency.symbol}${currentPrice}`}
             </DialogDescription>
           </DialogHeader>
           
@@ -167,12 +152,16 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                 <Check className="h-6 w-6 text-green-600" />
               </div>
               <h3 className="text-lg font-medium mb-2">
-                {language === 'ru' ? "Платеж успешно выполнен!" : "Payment Successful!"}
+                {language === 'ru' ? "Платеж успешно выполнен!" : 
+                 language === 'es' ? "¡Pago exitoso!" : 
+                 "Payment Successful!"}
               </h3>
               <p className="text-muted-foreground">
                 {language === 'ru' 
                   ? "Ваша подписка активирована. Спасибо за покупку!" 
-                  : "Your subscription has been activated. Thank you for your purchase!"}
+                  : language === 'es'
+                    ? "Su suscripción ha sido activada. ¡Gracias por su compra!"
+                    : "Your subscription has been activated. Thank you for your purchase!"}
               </p>
             </div>
           ) : (
@@ -180,18 +169,24 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="cardName" className="text-right">
-                    {language === 'ru' ? "Имя на карте" : "Name on Card"}
+                    {language === 'ru' ? "Имя на карте" : 
+                     language === 'es' ? "Nombre en la tarjeta" : 
+                     "Name on Card"}
                   </Label>
                   <Input
                     id="cardName"
-                    placeholder={language === 'ru' ? "Иван Иванов" : "John Smith"}
+                    placeholder={language === 'ru' ? "Иван Иванов" : 
+                                  language === 'es' ? "Juan Pérez" : 
+                                  "John Smith"}
                     className="col-span-3"
                     required
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="cardNumber" className="text-right">
-                    {language === 'ru' ? "Номер карты" : "Card Number"}
+                    {language === 'ru' ? "Номер карты" : 
+                     language === 'es' ? "Número de tarjeta" : 
+                     "Card Number"}
                   </Label>
                   <div className="col-span-3 relative">
                     <Input
@@ -207,7 +202,9 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="expiry" className="text-right">
-                    {language === 'ru' ? "Срок действия" : "Expiry Date"}
+                    {language === 'ru' ? "Срок действия" : 
+                     language === 'es' ? "Fecha de caducidad" : 
+                     "Expiry Date"}
                   </Label>
                   <Input
                     id="expiry"
@@ -231,12 +228,18 @@ const SubscriptionSettings = ({ currency, calculatePrice, handleSubscribe }: Sub
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>
-                  {language === 'ru' ? "Отмена" : "Cancel"}
+                  {language === 'ru' ? "Отмена" : 
+                   language === 'es' ? "Cancelar" : 
+                   "Cancel"}
                 </Button>
                 <Button type="submit" disabled={isProcessing}>
                   {isProcessing 
-                    ? (language === 'ru' ? "Обработка..." : "Processing...") 
-                    : (language === 'ru' ? "Оплатить" : "Pay Now")}
+                    ? (language === 'ru' ? "Обработка..." : 
+                       language === 'es' ? "Procesando..." : 
+                       "Processing...") 
+                    : (language === 'ru' ? "Оплатить" : 
+                       language === 'es' ? "Pagar ahora" : 
+                       "Pay Now")}
                 </Button>
               </DialogFooter>
             </form>

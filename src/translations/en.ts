@@ -117,7 +117,8 @@ const en = {
   receivePush: "Receive push notifications",
   mealReminders: "Meal Reminders",
   getMealReminders: "Get reminders to log your meals",
-  achievementNotifications: "Get notifications about your achievements",
+  achievementNotifications: "Achievement Notifications",
+  getAchievementNotifications: "Get notifications about your achievements",
   weeklyReports: "Weekly Reports",
   getWeeklyReports: "Get weekly nutrition reports",
   subscription: "Subscription",
@@ -205,7 +206,16 @@ const en = {
   loading: "Loading...",
   recalculate: "Recalculate",
   recipeTitle: "Recipe Title",
-  amount: "Amount"
+  amount: "Amount",
+  
+  // Header
+  notifications: "Notifications",
+  allNotifications: "Show all",
+  themeSettings: "Theme Settings",
+  profile: "My Profile",
+  myAccount: "My Account",
+  subscriptionStatus: "Free Plan",
+  logout: "Log Out"
 };
 
 export default en;
