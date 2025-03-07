@@ -10,6 +10,7 @@ import RecipeHeader from "@/components/recipe/RecipeHeader";
 import RecipeForm from "@/components/recipe/RecipeForm";
 import NutritionCard from "@/components/recipe/NutritionCard";
 import RecipeAdjuster from "@/components/recipe/RecipeAdjuster";
+import RecipesDialog from "@/components/recipe/RecipesDialog";
 
 const RecipeCalculator = () => {
   const { t, language } = useLanguage();
@@ -23,6 +24,7 @@ const RecipeCalculator = () => {
   const [selectedIngredient, setSelectedIngredient] = useState("");
   const [amount, setAmount] = useState(100);
   const [unit, setUnit] = useState("g");
+  const [recipesDialogOpen, setRecipesDialogOpen] = useState(false);
   
   useEffect(() => {
     const savedRecipes = localStorage.getItem('recipes');
@@ -168,37 +170,7 @@ const RecipeCalculator = () => {
   };
   
   const handleLoadRecipe = () => {
-    const savedRecipes = localStorage.getItem('recipes');
-    
-    if (savedRecipes) {
-      try {
-        const recipes = JSON.parse(savedRecipes);
-        
-        if (recipes.length > 0) {
-          const lastRecipe = recipes[recipes.length - 1];
-          loadRecipe(lastRecipe);
-        } else {
-          toast.info(t.loadRecipe, {
-            description: t.language === 'ru' 
-              ? 'У вас еще нет сохраненных рецептов' 
-              : 'You don\'t have any saved recipes yet'
-          });
-        }
-      } catch (e) {
-        console.error('Error loading recipes:', e);
-        toast.error(t.loadRecipe, {
-          description: t.language === 'ru' 
-            ? 'Ошибка при загрузке рецептов' 
-            : 'Error loading recipes'
-        });
-      }
-    } else {
-      toast.info(t.loadRecipe, {
-        description: t.language === 'ru' 
-          ? 'У вас еще нет сохраненных рецептов' 
-          : 'You don\'t have any saved recipes yet'
-      });
-    }
+    setRecipesDialogOpen(true);
   };
   
   const loadRecipe = (recipe: Recipe) => {
@@ -264,6 +236,12 @@ const RecipeCalculator = () => {
           />
         </div>
       </div>
+      
+      <RecipesDialog 
+        open={recipesDialogOpen} 
+        onOpenChange={setRecipesDialogOpen} 
+        onSelectRecipe={loadRecipe}
+      />
     </div>
   );
 };

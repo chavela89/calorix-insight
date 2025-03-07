@@ -10,27 +10,59 @@ import { toast } from "sonner";
 import { useLanguage } from "@/context/LanguageContext";
 
 export function QuickAdd() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openScanDialog, setOpenScanDialog] = useState(false);
   const [openVoiceDialog, setOpenVoiceDialog] = useState(false);
   const [currentMeal, setCurrentMeal] = useState("");
   
+  // Define localized food items
+  const recentItems = [
+    { 
+      name: { 
+        ru: "Куриная грудка", 
+        en: "Chicken breast" 
+      },
+      cal: 120 
+    },
+    { 
+      name: { 
+        ru: "Гречка", 
+        en: "Buckwheat" 
+      }, 
+      cal: 150 
+    },
+    { 
+      name: { 
+        ru: "Творог 5%", 
+        en: "Cottage cheese 5%" 
+      }, 
+      cal: 90 
+    },
+    { 
+      name: { 
+        ru: "Яблоко", 
+        en: "Apple" 
+      }, 
+      cal: 70 
+    }
+  ];
+  
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     toast.info(`${t.searchProduct}: ${searchQuery}`, {
-      description: t.language === 'ru' 
+      description: language === 'ru' 
         ? "Выполняется поиск продукта в базе данных..." 
         : "Searching for product in database...",
     });
     
     // Имитация задержки поиска
     setTimeout(() => {
-      toast.success(t.language === 'ru' 
+      toast.success(language === 'ru' 
         ? "Найдено 5 продуктов" 
         : "Found 5 products", {
-        description: t.language === 'ru' 
+        description: language === 'ru' 
           ? "Показаны результаты поиска по запросу" 
           : "Showing search results for your query",
       });
@@ -54,8 +86,8 @@ export function QuickAdd() {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(`${t.language === 'ru' ? "Продукт добавлен в" : "Product added to"} ${currentMeal}`, {
-      description: t.language === 'ru' ? "Данные успешно сохранены" : "Data successfully saved",
+    toast.success(`${language === 'ru' ? "Продукт добавлен в" : "Product added to"} ${currentMeal}`, {
+      description: language === 'ru' ? "Данные успешно сохранены" : "Data successfully saved",
     });
     setOpenAddDialog(false);
   };
@@ -63,7 +95,7 @@ export function QuickAdd() {
   const handleCloseScan = () => {
     setOpenScanDialog(false);
     toast.success(t.scanProduct, {
-      description: t.language === 'ru' 
+      description: language === 'ru' 
         ? "Продукт успешно распознан: Яблоко (52 ккал)" 
         : "Product successfully identified: Apple (52 kcal)",
     });
@@ -72,7 +104,7 @@ export function QuickAdd() {
   const handleCloseVoice = () => {
     setOpenVoiceDialog(false);
     toast.success(t.voiceInput, {
-      description: t.language === 'ru' 
+      description: language === 'ru' 
         ? "Голосовой ввод распознан: Куриная грудка 100г" 
         : "Voice input recognized: Chicken breast 100g",
     });
@@ -86,7 +118,7 @@ export function QuickAdd() {
             <div className="relative">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={t.language === 'ru' ? "Найти продукт..." : "Find product..."}
+                placeholder={language === 'ru' ? "Найти продукт..." : "Find product..."}
                 className="pl-9 pr-16"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -123,28 +155,23 @@ export function QuickAdd() {
             </Button>
           </div>
           
-          <h4 className="font-medium text-sm mt-2">{t.language === 'ru' ? "Недавно добавленные" : "Recently added"}</h4>
+          <h4 className="font-medium text-sm mt-2">{language === 'ru' ? "Недавно добавленные" : "Recently added"}</h4>
           <div className="grid grid-cols-2 gap-2">
-            {[
-              { name: t.language === 'ru' ? "Куриная грудка" : "Chicken breast", cal: 120 },
-              { name: t.language === 'ru' ? "Гречка" : "Buckwheat", cal: 150 },
-              { name: t.language === 'ru' ? "Творог 5%" : "Cottage cheese 5%", cal: 90 },
-              { name: t.language === 'ru' ? "Яблоко" : "Apple", cal: 70 }
-            ].map((item, index) => (
+            {recentItems.map((item, index) => (
               <Button
                 key={index}
                 variant="ghost"
                 className="justify-start h-auto py-2 px-3"
                 onClick={() => {
-                  toast.success(`${item.name} ${t.language === 'ru' ? "добавлен в дневник" : "added to journal"}`, {
-                    description: `${item.cal} ${t.language === 'ru' ? "ккал добавлено в ваш дневник питания" : "calories added to your food diary"}`
+                  toast.success(`${language === 'ru' ? item.name.ru : item.name.en} ${language === 'ru' ? "добавлен в дневник" : "added to journal"}`, {
+                    description: `${item.cal} ${language === 'ru' ? "ккал добавлено в ваш дневник питания" : "calories added to your food diary"}`
                   });
                 }}
               >
                 <div className="flex flex-col items-start text-left">
-                  <span className="text-sm">{item.name}</span>
+                  <span className="text-sm">{language === 'ru' ? item.name.ru : item.name.en}</span>
                   <span className="text-xs text-muted-foreground">
-                    {item.cal} {t.language === 'ru' ? "ккал" : "kcal"}
+                    {item.cal} {language === 'ru' ? "ккал" : "kcal"}
                   </span>
                 </div>
               </Button>
@@ -157,9 +184,9 @@ export function QuickAdd() {
       <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{t.language === 'ru' ? `Быстрое добавление в ${currentMeal}` : `Quick add to ${currentMeal}`}</DialogTitle>
+            <DialogTitle>{language === 'ru' ? `Быстрое добавление в ${currentMeal}` : `Quick add to ${currentMeal}`}</DialogTitle>
             <DialogDescription>
-              {t.language === 'ru' 
+              {language === 'ru' 
                 ? "Укажите продукт и его количество для быстрого добавления" 
                 : "Specify the product and its quantity for quick addition"}
             </DialogDescription>
@@ -168,18 +195,18 @@ export function QuickAdd() {
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="quickAddProduct" className="text-right">
-                  {t.language === 'ru' ? "Продукт" : "Product"}
+                  {language === 'ru' ? "Продукт" : "Product"}
                 </Label>
                 <Input
                   id="quickAddProduct"
-                  placeholder={t.language === 'ru' ? "Например: Яблоко" : "For example: Apple"}
+                  placeholder={language === 'ru' ? "Например: Яблоко" : "For example: Apple"}
                   className="col-span-3"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="quickAddWeight" className="text-right">
-                  {t.language === 'ru' ? "Вес (г)" : "Weight (g)"}
+                  {language === 'ru' ? "Вес (г)" : "Weight (g)"}
                 </Label>
                 <Input
                   id="quickAddWeight"
@@ -203,7 +230,7 @@ export function QuickAdd() {
           <DialogHeader>
             <DialogTitle>{t.scanProduct}</DialogTitle>
             <DialogDescription>
-              {t.language === 'ru' 
+              {language === 'ru' 
                 ? "Отсканируйте штрих-код продукта камерой" 
                 : "Scan the product barcode with the camera"}
             </DialogDescription>
@@ -215,7 +242,7 @@ export function QuickAdd() {
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={handleCloseScan}>{t.language === 'ru' ? "Готово" : "Done"}</Button>
+            <Button onClick={handleCloseScan}>{language === 'ru' ? "Готово" : "Done"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -226,7 +253,7 @@ export function QuickAdd() {
           <DialogHeader>
             <DialogTitle>{t.voiceInput}</DialogTitle>
             <DialogDescription>
-              {t.language === 'ru' 
+              {language === 'ru' 
                 ? "Произнесите название продукта и его количество" 
                 : "Say the name of the product and its quantity"}
             </DialogDescription>
@@ -238,12 +265,12 @@ export function QuickAdd() {
             </div>
           </div>
           <p className="text-center text-sm text-muted-foreground">
-            {t.language === 'ru' 
+            {language === 'ru' 
               ? "Слушаю..." 
               : "Listening..."}
           </p>
           <DialogFooter>
-            <Button onClick={handleCloseVoice}>{t.language === 'ru' ? "Готово" : "Done"}</Button>
+            <Button onClick={handleCloseVoice}>{language === 'ru' ? "Готово" : "Done"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

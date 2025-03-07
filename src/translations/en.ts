@@ -20,7 +20,7 @@ const en = {
   weeklyProgress: "Weekly Progress",
   kcal: "kcal",
   add: "Add",
-  save: "Save",
+  save: "saved",
   ingredient: "Ingredient",
   weight: "Weight",
   cm: "cm",
@@ -175,9 +175,9 @@ const en = {
   searchIngredient: "Search for ingredient...",
   quantity: "Quantity",
   unit: "Unit",
-  g: "g",
+  gram: "g",
   ml: "ml",
-  pcs: "pcs",
+  piece: "pcs",
   tbsp: "tbsp",
   tsp: "tsp",
   cup: "cup",
@@ -195,14 +195,17 @@ const en = {
   atLeastOneIngredient: "Add at least one ingredient",
   savedSuccessfully: "Recipe saved successfully",
   savedRecipes: "Saved Recipes",
-  loadRecipe: "Load",
-  deleteRecipe: "Delete",
+  loadRecipe: "Load Recipe",
+  deleteRecipe: "Delete Recipe",
   noSavedRecipes: "No saved recipes yet",
   confirmDelete: "Are you sure you want to delete this recipe?",
   cancel: "Cancel",
   delete: "Delete",
   loadRecipeConfirm: "Load this recipe? Unsaved changes will be lost.",
-  loading: "Loading..."
+  loading: "Loading...",
+  recalculate: "Recalculate",
+  recipeTitle: "Recipe Title",
+  amount: "Amount"
 };
 
 export default en;
