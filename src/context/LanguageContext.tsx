@@ -1,8 +1,6 @@
 
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import en from '../translations/en';
-import ru from '../translations/ru';
-import es from '../translations/es';
+import { en, ru, es } from '../translations';
 import { LanguageContextType } from './LanguageContextTypes';
 
 // Create a context with default values

@@ -209,13 +209,11 @@ const es = {
   amount: "Cantidad",
   
   // Header
-  notifications: "Notificaciones",
   allNotifications: "Mostrar todas",
   themeSettings: "Configuración de Tema",
   profile: "Mi Perfil",
   myAccount: "Mi Cuenta",
-  subscriptionStatus: "Plan Gratuito",
-  logout: "Cerrar Sesión"
+  subscriptionStatus: "Plan Gratuito"
 };
 
 export default es;

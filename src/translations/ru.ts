@@ -209,13 +209,11 @@ const ru = {
   amount: "Количество",
   
   // Header
-  notifications: "Уведомления",
   allNotifications: "Показать все",
   themeSettings: "Тема оформления",
   profile: "Мой профиль",
   myAccount: "Мой аккаунт",
-  subscriptionStatus: "Бесплатный план",
-  logout: "Выйти"
+  subscriptionStatus: "Бесплатный план"
 };
 
 export default ru;

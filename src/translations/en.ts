@@ -209,13 +209,11 @@ const en = {
   amount: "Amount",
   
   // Header
-  notifications: "Notifications",
   allNotifications: "Show all",
   themeSettings: "Theme Settings",
   profile: "My Profile",
   myAccount: "My Account",
-  subscriptionStatus: "Free Plan",
-  logout: "Log Out"
+  subscriptionStatus: "Free Plan"
 };
 
 export default en;
